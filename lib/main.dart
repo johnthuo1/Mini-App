@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 
-import 'booktable.dart';
+import  'profile.dart';
 
 void main() => runApp(
   const MaterialApp(
@@ -141,6 +141,11 @@ class _HomePageState extends State<HomePage> {
                 ),
                 Padding(
                   padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 10),
+                  child: InkWell(
+                    onTap: () async {
+                       Navigator.push(context, MaterialPageRoute(builder: ((context) => (Profile()))));
+
+                    },
                   child: ListTile(
                     leading: Icon(
                       Icons.location_history,
@@ -160,6 +165,7 @@ class _HomePageState extends State<HomePage> {
                     tileColor: Color.fromARGB(255, 255, 255, 255),
                     dense: false,
                   ),
+                )
                 ),
                 Padding(
                   padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 10),
@@ -342,8 +348,9 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       ),
+      
       floatingActionButton: FloatingActionButton(onPressed: (){
-        Navigator.push(context, MaterialPageRoute(builder: (context)=> (BookTable())));
+        Navigator.push(context, MaterialPageRoute(builder: (context)=> (Profile())));
       },
       child: Icon(Icons.arrow_forward_ios),),
     );
