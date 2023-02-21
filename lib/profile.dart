@@ -58,7 +58,7 @@ class _ProfileState extends State<Profile> {
                   ),
                 ),
                 const Text(
-                  'john thuo',
+                  'John Thuo',
                   style: TextStyle(
                       color: Colors.white,
                       fontSize: 15,
