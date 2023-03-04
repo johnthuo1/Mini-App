@@ -58,7 +58,7 @@ class _ProfileState extends State<Profile> {
                   ),
                 ),
                 const Text(
-                  'john thuo',
+                  'John Thuo',
                   style: TextStyle(
                       color: Colors.white,
                       fontSize: 15,
@@ -106,7 +106,7 @@ class _ProfileState extends State<Profile> {
                       ]),
                       DataRow(
                           cells: [
-                          DataCell(Text("Number of Books", style: TextStyle(fontSize: 15, fontFamily: 'Poppins', fontWeight: FontWeight.bold))), 
+                          DataCell(Text("No. of Books", style: TextStyle(fontSize: 15, fontFamily: 'Poppins', fontWeight: FontWeight.bold))), 
                           DataCell(Text("10"))])
                     ]),
                   ),
