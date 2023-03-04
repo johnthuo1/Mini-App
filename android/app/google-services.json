@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1073421211205",
+    "project_id": "alibrary-bf406",
+    "storage_bucket": "alibrary-bf406.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1073421211205:android:1fe88fab77030f3abdf52c",
+        "android_client_info": {
+          "package_name": "com.example.booksgrid"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1073421211205-ch3b1h8lune0qi7p1hnvitt836qcbk49.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB6Hb60TLiZrjpXcFPMxlHko2tn4-6-yN8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1073421211205-ch3b1h8lune0qi7p1hnvitt836qcbk49.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
