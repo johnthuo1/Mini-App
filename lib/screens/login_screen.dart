@@ -96,7 +96,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return Container(
       alignment: Alignment.centerRight,
       child: TextButton(
-        onPressed: () => print('Forgot Password Button Pressed'),
+        onPressed: () {},
         // padding: const EdgeInsets.only(right: 0.0),
         child: Text(
           'Forgot Password?',
