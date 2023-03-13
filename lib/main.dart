@@ -1,17 +1,20 @@
-// ignore_for_file: prefer_const_constructors, depend_on_referenced_packages
+// ignore_for_file: prefer_const_constructors, depend_on_referenced_packages, unused_import, unnecessary_this, sdk_version_constructor_tearoffs, non_constant_identifier_names, use_build_context_synchronously
 
+import 'package:booksgrid/screens/sign_in.dart';
 import 'package:booksgrid/screens/sign_up.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'model/user_model.dart';
 import 'profile.dart';
 
+// Initialize firebase
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(MaterialApp(debugShowCheckedModeBanner: false, home: SignUpScreen()));
- 
+  runApp(MaterialApp(debugShowCheckedModeBanner: false, home: LoginScreen()));
 }
-
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -22,6 +25,24 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  User? user = FirebaseAuth.instance.currentUser;
+  UserModel loggedInUser = UserModel();
+
+  @override
+  void initState() {
+    super.initState();
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(user!.uid)
+        .get()
+        .then((value) {
+      this.loggedInUser = UserModel.fromMap(value.data());
+      setState(
+        () {},
+      );
+    });
+  }
+
   final List<String> _listItem = [
     'assets/images/book1.jpg',
     'assets/images/book2.jpg',
@@ -57,7 +78,7 @@ class _HomePageState extends State<HomePage> {
           )
         ],
       ),
-      // Drawer code 
+      // Drawer code
       drawer: SizedBox(
         width: 280,
         child: Drawer(
@@ -100,7 +121,7 @@ class _HomePageState extends State<HomePage> {
                         child: Padding(
                           padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 5),
                           child: Text(
-                            'john thuo\nj.mwangi@alustudent.com',
+                            '${loggedInUser.userName}\n${loggedInUser.email}',
                             textAlign: TextAlign.center,
                             style: TextStyle(
                                 color: Colors.white,
@@ -263,10 +284,7 @@ class _HomePageState extends State<HomePage> {
                   padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 10),
                   child: InkWell(
                     onTap: () async {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: ((context) => (SignUpScreen()))));
+                      Logout(context);
                     },
                     child: ListTile(
                       leading: Icon(
@@ -396,5 +414,12 @@ class _HomePageState extends State<HomePage> {
         child: Icon(Icons.arrow_forward_ios),
       ),
     );
+  }
+
+  // Log out functionality
+  Future<void> Logout(BuildContext context) async {
+    await FirebaseAuth.instance.signOut();
+    Navigator.pushReplacement(context,
+        MaterialPageRoute(builder: (context) => LoginScreen()));
   }
 }
