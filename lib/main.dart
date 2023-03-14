@@ -1,13 +1,17 @@
 // ignore_for_file: prefer_const_constructors, depend_on_referenced_packages, unused_import, unnecessary_this, sdk_version_constructor_tearoffs, non_constant_identifier_names, use_build_context_synchronously
 
+import 'package:booksgrid/screens/notifications.dart';
+import 'package:booksgrid/screens/profile.dart';
 import 'package:booksgrid/screens/sign_in.dart';
 import 'package:booksgrid/screens/sign_up.dart';
+import 'package:booksgrid/screens/settings.dart';
+import 'package:booksgrid/screens/upload_book.dart';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'model/user_model.dart';
-import 'profile.dart';
 
 // Initialize firebase
 Future main() async {
@@ -202,6 +206,13 @@ class _HomePageState extends State<HomePage> {
                     )),
                 Padding(
                   padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 10),
+                 child: InkWell(
+                      onTap: () async {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: ((context) => (NotificationsPage()))));
+                      },   
                   child: ListTile(
                     leading: Icon(
                       Icons.notifications_active,
@@ -223,7 +234,7 @@ class _HomePageState extends State<HomePage> {
                     tileColor: Color.fromARGB(255, 255, 255, 255),
                     dense: false,
                   ),
-                ),
+                )),
                 Padding(
                   padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 10),
                   child: InkWell(
@@ -231,7 +242,7 @@ class _HomePageState extends State<HomePage> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: ((context) => (HomePage()))));
+                              builder: ((context) => (SettingsPage()))));
                     },
                     child: ListTile(
                       leading: Icon(
@@ -409,10 +420,11 @@ class _HomePageState extends State<HomePage> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(
-              context, MaterialPageRoute(builder: (context) => (Profile())));
+              context, MaterialPageRoute(builder: (context) => (BookUploadPage())));
         },
-        child: Icon(Icons.arrow_forward_ios),
+        child: Icon(Icons.upload_file),
       ),
+      
     );
   }
 

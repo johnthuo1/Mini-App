@@ -1,0 +1,298 @@
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, unused_import, unused_field
+
+import 'package:booksgrid/main.dart';
+import 'package:booksgrid/screens/sign_in.dart';
+import 'package:booksgrid/screens/sign_up.dart';
+import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:booksgrid/model/user_model.dart';
+
+class Profile extends StatefulWidget{
+  const Profile({Key? key}) : super(key: key);
+  @override
+  State<StatefulWidget> createState() {
+     return _ProfilePageState();
+  }
+}
+
+class _ProfilePageState extends State<Profile>{
+
+  final double  _drawerIconSize = 24;
+  final double _drawerFontSize = 17;
+  User? user = FirebaseAuth.instance.currentUser;
+  UserModel loggedInUser = UserModel();
+
+  @override
+  void initState() {
+    super.initState();
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(user!.uid)
+        .get()
+        .then((value) {
+      loggedInUser = UserModel.fromMap(value.data());
+      setState(
+        () {},
+      );
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Profile Page",
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
+        elevation: 0.5,
+        iconTheme: IconThemeData(color: Colors.white),
+        flexibleSpace:Container(
+          decoration: BoxDecoration(
+              gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: <Color>[Theme.of(context).primaryColor, Theme.of(context).colorScheme.secondary,]
+              )
+          ),
+        ),
+        actions: [
+          Container(
+            margin: EdgeInsets.only( top: 16, right: 16,),
+            child: Stack(
+              children: <Widget>[
+                Icon(Icons.notifications),
+                Positioned(
+                  right: 0,
+                  child: Container(
+                    padding: EdgeInsets.all(1),
+                    decoration: BoxDecoration( color: Colors.red, borderRadius: BorderRadius.circular(6),),
+                    constraints: BoxConstraints( minWidth: 12, minHeight: 12, ),
+                    child: Text( '5', style: TextStyle(color: Colors.white, fontSize: 8,), textAlign: TextAlign.center,),
+                  ),
+                )
+              ],
+            ),
+          )
+        ],
+      ),
+      body: SingleChildScrollView(
+        child: Stack(
+          children: [
+            Container(height: 100, 
+            // child: HeaderWidget(100,false,Icons.house_rounded),),
+            ),
+            Container(
+              alignment: Alignment.center,
+              margin: EdgeInsets.fromLTRB(25, 10, 25, 10),
+              padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+              child: Column(
+                children: [
+                  Container(
+                    padding: EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(100),
+                      border: Border.all(width: 5, color: Colors.white),
+                      color: Colors.white,
+                      boxShadow: [
+                        BoxShadow(color: Colors.black12, blurRadius: 20, offset: const Offset(5, 5),),
+                      ],
+                    ),
+                    child: Icon(Icons.person, size: 80, color: Colors.grey.shade300,),
+                  ),
+                  SizedBox(height: 20,),
+                  Text('${loggedInUser.userName}\n',
+
+                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)
+                  ,),
+                  SizedBox(height: 20,),
+                  Text('Student', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
+                  SizedBox(height: 10,),
+                  Container(
+                    padding: EdgeInsets.all(10),
+                    child: Column(
+                      children: <Widget>[
+                        Container(
+                          padding: const EdgeInsets.only(left: 8.0, bottom: 4.0),
+                          alignment: Alignment.topLeft,
+                          child: Text(
+                            "User Information",
+                            style: TextStyle(
+                              color: Colors.black87,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 16,
+                            ),
+                            textAlign: TextAlign.left,
+                          ),
+                        ),
+                        Card(
+                          child: Container(
+                            alignment: Alignment.topLeft,
+                            padding: EdgeInsets.all(15),
+                            child: Column(
+                              children: <Widget>[
+                                Column(
+                                  children: <Widget>[
+                                    ...ListTile.divideTiles(
+                                      color: Colors.grey,
+                                      tiles: [
+                                        ListTile(
+                                          contentPadding: EdgeInsets.symmetric(
+                                              horizontal: 12, vertical: 4),
+                                          leading: Icon(Icons.my_location),
+                                          title: Text("Location"),
+                                          subtitle: Text("Rwanda"),
+                                        ),
+                                        ListTile(
+                                          leading: Icon(Icons.email),
+                                          title: Text("Email"),
+                                          subtitle: Text('${loggedInUser.email}'),
+                                        ),
+                                        ListTile(
+                                          leading: Icon(Icons.phone),
+                                          title: Text("Phone"),
+                                          subtitle: Text("+255723105974"),
+                                        ),
+                                        
+                                      ],
+                                    ),
+                                  ],
+                                )
+                              ],
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+}
+// class Profile extends StatefulWidget {
+//   const Profile({Key? key}) : super(key: key);
+
+//   @override
+//   State<Profile> createState() => _ProfileState();
+// }
+
+// class _ProfileState extends State<Profile> {
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       backgroundColor: Colors.blue,
+//       appBar: AppBar(
+//         backgroundColor: Colors.blue,
+//         automaticallyImplyLeading: false,
+//         title: const Padding(
+//           padding: EdgeInsetsDirectional.fromSTEB(130, 0, 0, 0),
+//           child: Text(
+//             'User Profile',
+//             style: TextStyle(
+//                 fontSize: 17,
+//                 fontFamily: 'Poppins',
+//                 fontWeight: FontWeight.bold),
+//           ),
+//         ),
+//         actions: [],
+//         centerTitle: false,
+//         elevation: 2,
+//       ),
+//       body: Center(
+        
+//         child: SafeArea(
+//           child: GestureDetector(
+//             onTap: () async {},
+//             child: Column(
+//           mainAxisAlignment: MainAxisAlignment.center,
+//           crossAxisAlignment: CrossAxisAlignment.center,
+//               mainAxisSize: MainAxisSize.max,
+//               children: [
+//                 Padding(
+//                   padding: const EdgeInsetsDirectional.fromSTEB(0, 30, 0, 0),
+//                   child: Container(
+//                     width: 120,
+//                     height: 120,
+//                     clipBehavior: Clip.antiAlias,
+//                     decoration: const BoxDecoration(
+//                       shape: BoxShape.circle,
+//                     ),
+//                     child: Image.network(
+//                       'https://picsum.photos/seed/736/600',
+//                       fit: BoxFit.cover,
+//                     ),
+//                   ),
+//                 ),
+//                 const Text(
+//                   'John Thuo',
+//                   style: TextStyle(
+//                       color: Colors.white,
+//                       fontSize: 15,
+//                       fontFamily: 'Poppins',
+//                       fontWeight: FontWeight.bold),
+//                 ),
+//                 Expanded(
+//                   child: Padding(
+//                     padding: const EdgeInsetsDirectional.fromSTEB(0, 70, 0, 0),
+//                     child: DataTable(columns: [
+//                       DataColumn(
+//                         label: DefaultTextStyle.merge(
+//                           softWrap: true,
+//                           child: const Text(
+//                             '',
+//                             style: TextStyle(
+//                                 color: Colors.white,
+//                                 fontSize: 15,
+//                                 fontFamily: 'Poppins',
+//                                 fontWeight: FontWeight.bold),
+//                           ),
+//                         ),
+//                       ),
+//                       DataColumn(
+//                         label: DefaultTextStyle.merge(
+//                           softWrap: true,
+//                           child: const Text(
+//                             '',
+//                             style: TextStyle(
+//                                 color: Colors.white,
+//                                 fontSize: 15,
+//                                 fontFamily: 'Poppins',
+//                                 fontWeight: FontWeight.bold),
+//                           ),
+//                         ),
+//                       ),
+//                     ], rows: [
+//                       DataRow(cells: [
+//                         DataCell(Text("Name ", style: TextStyle(fontSize: 15, fontFamily: 'Poppins', fontWeight: FontWeight.bold))),
+//                         DataCell(Text("John Thuo"), showEditIcon: true)
+//                       ]),
+//                       DataRow(cells: [
+//                         DataCell(Text("Email", style: TextStyle(fontSize: 15, fontFamily: 'Poppins', fontWeight: FontWeight.bold))),
+//                         DataCell(Text("j.mwangi@alustudent.com"), showEditIcon: true)
+//                       ]),
+//                       DataRow(
+//                           cells: [
+//                           DataCell(Text("No. of Books", style: TextStyle(fontSize: 15, fontFamily: 'Poppins', fontWeight: FontWeight.bold))), 
+//                           DataCell(Text("10"))])
+//                     ]),
+//                   ),
+//                 ),
+//               ],
+//             ),
+//           ),
+//         ),
+//       ),
+//         floatingActionButton: FloatingActionButton(onPressed: (){
+//         Navigator.push(context, MaterialPageRoute(builder: (context)=> (HomePage())));
+//       },
+//       child: Icon(Icons.arrow_back_ios),),
+//     );
+//   }
+// }

@@ -2,6 +2,7 @@
 
 import 'package:booksgrid/main.dart';
 import 'package:booksgrid/screens/sign_in.dart';
+import 'package:booksgrid/screens/terms_conditions.dart';
 import 'package:booksgrid/utilities/constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:booksgrid/model/user_model.dart';
@@ -185,10 +186,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
               },
             ),
           ),
-          Text(
-            'Terms  and Conditions',
-            style: kLabelStyle,
-          ),
+      GestureDetector(
+            onTap: () async{
+               Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: ((context) => (TermsAndConditionsPage()))));
+            }, 
+            child: Text(
+            'Terms and Conditions',
+            style: kLabelStyle, ),)
+          
         ],
       ),
     ),
