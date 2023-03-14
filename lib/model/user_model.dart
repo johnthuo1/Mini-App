@@ -1,4 +1,3 @@
-
 // User model for the application 
 class UserModel {
   String? uid;
@@ -7,7 +6,7 @@ class UserModel {
 
   UserModel({this.uid, this.email,this.userName});
 
-  // receiving data from server
+  // receiving data from the server
   factory UserModel.fromMap(map) {
     return UserModel(
       uid: map['uid'],
