@@ -1,16 +1,34 @@
-# booksgrid
+# THE ALIBRARY PROJECT
 
-A new Flutter project.
+Here are the resources we used to complete our progress so far:
 
-## Getting Started
+- [Firebase Authentication](https://youtu.be/4vKiJZNPhss)
+- [Login & Signup Fibrebase Sample](https://github.com/Kavit900/flutter_login_signup_firebase)
 
-This project is a starting point for a Flutter application.
+To see the UI/UX implementation of our mini-project, view our [UI/UX Implementation on flutterflow](https://app.flutterflow.io/share/mob-dev2-ft2lj0)
 
-A few resources to get you started if this is your first Flutter project:
+A few things to note when navigating through the UI/UX design:
+- On opening the link, the first page that appears is the 'upload a book' page.
+- This page does not have a back button (Part of the remaining 10% ui/ux design left)
+- Use the page's embede forward button (at the top right) to navigate to the next page (homepage) where you can navigate to all other pages in the app
+- The UI/UX implementation is with the assumption that a user of the app is already registered in the database. Hence, no need to enter details before clicking login or signup. Also, a you will have to logout to have access to the sign in and signup screens.
+- In the drawer, there is a 'logout' button where users can log out of the account.
+- On logout, the user can sign in. There is a back button on almost all pages to enhance smooth navigation to previously visited pages.
+- The actual implementation will have the drawer on all pages. For now, we have implemented the drawer but it only appears on the homepage. the back button on most pages will help take users back to the homepage.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+# ABOUT THE ALIBRARY PROJECT
+This is a flutter mobile app that connects the ALU community (students and staff) to exchange books with one another, irrespective of their social circles, cohorts, or courses. This app aims to foster connections and promote a shared community reading culture. Students can upload images of books they own, while others on the platform can 'book' the book they're interested in reading. The app will facilitate communication between the book owner and the interested student, saving the latter the cost of purchasing that book. The app will also track who has booked a particular book, providing a reliable record in case of any misconduct or lost books. In essence, this app will provide students with an opportunity to broaden their horizons, discover new books at no cost, and develop a lifelong love for reading.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Pages available:
+List of Application Pages (and the status of the UI implementation)
+
+- Sign Up Page (done)
+- Log In Page (done)
+- Terms & Conditions Page (done)
+- Drawer Page (Done partially; yet to be put on all pages. Only available on homepage)
+- Home Page (done)
+- Book Details Page (not fully done: the images of the books appear on the homepage. Details are not yet added)
+- Book Upload Page (done)
+- Notifications Page (done. To view, logout and choose to signup instead of signing in. There you can click on the terms and conditions to view)
+- Settings Page (done)
+- Profile Page (done)
