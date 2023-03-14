@@ -37,7 +37,7 @@ List of Application Pages (and the status of the UI design)
 
 We have implemented 9 of the 10 UI/UX designed screens. That makes 90% as required. The Homepage and the drawer are all within the main.dart file.
 
-###Here is a list of the pages done:
+### Here is a list of the pages done:
 - Sign Up
 - Terms and Conditions
 - Sign In
