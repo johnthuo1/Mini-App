@@ -4,6 +4,8 @@ Here are the resources we used to complete our progress so far:
 
 - [Firebase Authentication](https://youtu.be/4vKiJZNPhss)
 - [Login & Signup Fibrebase Sample](https://github.com/Kavit900/flutter_login_signup_firebase)
+- Application of class content (message UI class example for notifications page)
+
 
 To see the UI/UX implementation of our mini-project, view our [UI/UX Implementation on flutterflow](https://app.flutterflow.io/share/mob-dev2-ft2lj0)
 
