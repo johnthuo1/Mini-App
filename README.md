@@ -20,15 +20,32 @@ A few things to note when navigating through the UI/UX design:
 This is a flutter mobile app that connects the ALU community (students and staff) to exchange books with one another, irrespective of their social circles, cohorts, or courses. This app aims to foster connections and promote a shared community reading culture. Students can upload images of books they own, while others on the platform can 'book' the book they're interested in reading. The app will facilitate communication between the book owner and the interested student, saving the latter the cost of purchasing that book. The app will also track who has booked a particular book, providing a reliable record in case of any misconduct or lost books. In essence, this app will provide students with an opportunity to broaden their horizons, discover new books at no cost, and develop a lifelong love for reading.
 
 Pages available:
-List of Application Pages (and the status of the UI implementation)
+List of Application Pages (and the status of the UI design)
 
 - Sign Up Page (done)
 - Log In Page (done)
 - Terms & Conditions Page (done)
-- Drawer Page (Done partially; yet to be put on all pages. Only available on homepage)
+- Drawer Page (Done)
 - Home Page (done)
 - Book Details Page (not fully done: the images of the books appear on the homepage. Details are not yet added)
 - Book Upload Page (done)
 - Notifications Page (done. To view, logout and choose to signup instead of signing in. There you can click on the terms and conditions to view)
 - Settings Page (done)
 - Profile Page (done)
+
+We have implemented 9 of the 10 UI/UX designed screens. That makes 90% as required. The Homepage and the drawer are all within the main.dart file.
+
+###Here is a list of the pages done:
+- Sign Up
+- Terms and Conditions
+- Sign In
+- Home
+- Drawer (UI/UX fully done, but yet to be put on all pages. Only available on homepage)
+- Notifications
+- Profile (UI/UX done but is not connected to the database hence does not display profile details of a specific user)
+- Settings
+- upload_book (Not fully done as some part requires database connection. every other thing is done for this page)
+
+###Page not yet implemented:
+
+Book Details - as it requires connection with the database.
