@@ -1,4 +1,5 @@
-class ChatModel {
+# How the Notifications will appear on each line
+  class ChatModel {
   final String avatarUrl;
   final String name;
   final String datetime;
