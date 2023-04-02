@@ -1,5 +1,5 @@
 // ignore_for_file: unnecessary_new, body_might_complete_normally_nullable, prefer_const_constructors, library_private_types_in_public_api, avoid_print, non_constant_identifier_names
-
+// You can also use Scaffold Messages
 import 'package:booksgrid/main.dart';
 import 'package:booksgrid/screens/sign_up.dart';
 import 'package:firebase_auth/firebase_auth.dart';
