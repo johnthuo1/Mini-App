@@ -11,7 +11,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:image_picker/image_picker.dart';
 import 'model/user_model.dart';
+
+import 'dart:typed_data';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 // Initialize firebase
 Future main() async {
@@ -32,6 +38,15 @@ class _HomePageState extends State<HomePage> {
   User? user = FirebaseAuth.instance.currentUser;
   UserModel loggedInUser = UserModel();
 
+  final ImagePicker _picker = ImagePicker();
+
+  Future<void> _pickImages() async {
+    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      // do something with the selected image file
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -47,6 +62,21 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  // final List<String> _listItem = [];
+
+  // Future<void> fetchBooks() async {
+  //   final QuerySnapshot<Map<String, dynamic>> querySnapshot =
+  //       await FirebaseFirestore.instance.collection('books').get();
+  //   final List<QueryDocumentSnapshot<Map<String, dynamic>>> docs =
+  //       querySnapshot.docs;
+  //   for (final doc in docs) {
+  //     final frontImageUrl = doc.get('frontImageUrl');
+  //     final response = await http.get(Uri.parse(frontImageUrl));
+  //     final imageData = response.bodyBytes;
+  //     final base64Image = base64Encode(imageData);
+  //     _listItem.add(base64Image);
+  //   }
+  // }
   final List<String> _listItem = [
     'assets/images/book1.jpg',
     'assets/images/book2.jpg',
@@ -101,25 +131,61 @@ class _HomePageState extends State<HomePage> {
                   ),
                   child: Column(
                     mainAxisSize: MainAxisSize.max,
-                    children: [
+                    children: <Widget>[
                       Align(
                         alignment: AlignmentDirectional(-0.1, -0.2),
                         child: Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(0, 30, 0, 2),
-                          child: Container(
-                            width: 129,
-                            height: 129,
-                            clipBehavior: Clip.antiAlias,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                            ),
-                            child: Image.network(
-                              'https://picsum.photos/seed/716/600',
-                              fit: BoxFit.cover,
-                            ),
+                          padding: EdgeInsetsDirectional.fromSTEB(75, 30, 0, 2),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Container(
+                                width: 129,
+                                height: 129,
+                                clipBehavior: Clip.antiAlias,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                ),
+                                child: Image.network(
+                                  'https://picsum.photos/seed/716/600',
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                              SizedBox(width: 10),
+                              InkWell(
+                                onTap: _pickImages,
+                                child: SizedBox(
+                                  width: 50,
+                                  height: 50,
+                                  child: Icon(
+                                    Icons.camera_alt,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ),
+                      // Align(
+                      //   alignment: AlignmentDirectional(-0.1, -0.2),
+                      //   child: Padding(
+                      //     padding: EdgeInsetsDirectional.fromSTEB(0, 30, 0, 2),
+                      //     child: Container(
+                      //       width: 129,
+                      //       height: 129,
+                      //       clipBehavior: Clip.antiAlias,
+                      //       decoration: BoxDecoration(
+                      //         shape: BoxShape.circle,
+                      //       ),
+                      //       child: Image.network(
+                      //         'https://picsum.photos/seed/716/600',
+                      //         fit: BoxFit.cover,
+                      //       ),
+                      //     ),
+                      //   ),
+                      // ),
+
                       Align(
                         alignment: AlignmentDirectional(-0.15, -0.25),
                         child: Padding(
@@ -205,36 +271,36 @@ class _HomePageState extends State<HomePage> {
                       ),
                     )),
                 Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 10),
-                 child: InkWell(
+                    padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 10),
+                    child: InkWell(
                       onTap: () async {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: ((context) => (NotificationsPage()))));
-                      },   
-                  child: ListTile(
-                    leading: Icon(
-                      Icons.notifications_active,
-                      color: Colors.blue,
-                    ),
-                    title: Text(
-                      'Notifications',
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 17,
-                          fontFamily: 'Poppins',
-                          fontWeight: FontWeight.bold),
-                    ),
-                    trailing: Icon(
-                      Icons.arrow_forward_ios,
-                      color: Color(0xFF303030),
-                      size: 20,
-                    ),
-                    tileColor: Color.fromARGB(255, 255, 255, 255),
-                    dense: false,
-                  ),
-                )),
+                      },
+                      child: ListTile(
+                        leading: Icon(
+                          Icons.notifications_active,
+                          color: Colors.blue,
+                        ),
+                        title: Text(
+                          'Notifications',
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 17,
+                              fontFamily: 'Poppins',
+                              fontWeight: FontWeight.bold),
+                        ),
+                        trailing: Icon(
+                          Icons.arrow_forward_ios,
+                          color: Color(0xFF303030),
+                          size: 20,
+                        ),
+                        tileColor: Color.fromARGB(255, 255, 255, 255),
+                        dense: false,
+                      ),
+                    )),
                 Padding(
                   padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 10),
                   child: InkWell(
@@ -419,19 +485,18 @@ class _HomePageState extends State<HomePage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => (BookUploadPage())));
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => (BookUploadPage())));
         },
         child: Icon(Icons.upload_file),
       ),
-      
     );
   }
 
   // Log out functionality
   Future<void> Logout(BuildContext context) async {
     await FirebaseAuth.instance.signOut();
-    Navigator.pushReplacement(context,
-        MaterialPageRoute(builder: (context) => LoginScreen()));
+    Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (context) => LoginScreen()));
   }
 }

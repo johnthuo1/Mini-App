@@ -68,7 +68,8 @@ class _LoginScreenState extends State<LoginScreen> {
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
           ),
-        ));
+        )
+        );
 
     //password field
     final passwordField = TextFormField(
@@ -103,7 +104,8 @@ class _LoginScreenState extends State<LoginScreen> {
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
           ),
-        ));
+        )
+        );
 
     Widget ForgotPasswordBtn() {
       return Container(
@@ -165,7 +167,8 @@ class _LoginScreenState extends State<LoginScreen> {
               fontWeight: FontWeight.bold,
               fontFamily: 'OpenSans',
             ),
-          )),
+          )
+          ),
     );
 
     return Scaffold(

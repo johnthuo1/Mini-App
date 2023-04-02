@@ -344,10 +344,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
       }
     }
   }
+  
   postDetailsToFirestore() async {
     // calling our firestore
     // calling our user model
-    // sedning these values
+    // sending these values
 
     FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
     User? user = _auth.currentUser;
