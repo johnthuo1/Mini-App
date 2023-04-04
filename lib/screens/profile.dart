@@ -3,6 +3,8 @@
 import 'package:booksgrid/main.dart';
 import 'package:booksgrid/screens/sign_in.dart';
 import 'package:booksgrid/screens/sign_up.dart';
+// import 'package:booksgrid/screens/user_books.dart';
+// import 'package:booksgrid/screens/user_information.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -101,31 +103,48 @@ class _ProfilePageState extends State<Profile>{
                     ),
                     child: Icon(Icons.person, size: 80, color: Colors.grey.shade300,),
                   ),
-                  SizedBox(height: 20,),
-                  Text('${loggedInUser.userName}\n',
-
-                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)
-                  ,),
-                  SizedBox(height: 20,),
-                  Text('Student', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
                   SizedBox(height: 10,),
+                  Text('${loggedInUser.userName}\n',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)
+                  ,),
                   Container(
                     padding: EdgeInsets.all(10),
                     child: Column(
                       children: <Widget>[
-                        Container(
-                          padding: const EdgeInsets.only(left: 8.0, bottom: 4.0),
-                          alignment: Alignment.topLeft,
-                          child: Text(
-                            "User Information",
-                            style: TextStyle(
-                              color: Colors.black87,
-                              fontWeight: FontWeight.w500,
-                              fontSize: 16,
-                            ),
-                            textAlign: TextAlign.left,
+                Container(
+                padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                              Container(
+                                padding: const EdgeInsets.only(
+                                    left: 8.0, bottom: 4.0),
+                                alignment: Alignment.topLeft,
+                                child: Text(
+                                  "User Information",
+                                  style: TextStyle(
+                                    color: Colors.black87,
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 16,
+                                  ),
+                                  textAlign: TextAlign.left,
+                                ),
+                              ),
+                              IconButton(
+                                icon: Icon(Icons.edit),
+                                onPressed: () {
+                                  // Navigator.push(
+                                  //   context,
+                                  //   MaterialPageRoute(
+                                  //       builder: (context) =>
+                                  //           UserInformationPage()),
+                                  // );
+                                },
+                              ),
+                            ],
                           ),
                         ),
+
                         Card(
                           child: Container(
                             alignment: Alignment.topLeft,
@@ -138,21 +157,14 @@ class _ProfilePageState extends State<Profile>{
                                       color: Colors.grey,
                                       tiles: [
                                         ListTile(
-                                          contentPadding: EdgeInsets.symmetric(
-                                              horizontal: 12, vertical: 4),
-                                          leading: Icon(Icons.my_location),
-                                          title: Text("Location"),
-                                          subtitle: Text("Rwanda"),
-                                        ),
-                                        ListTile(
                                           leading: Icon(Icons.email),
                                           title: Text("Email"),
                                           subtitle: Text('${loggedInUser.email}'),
                                         ),
                                         ListTile(
-                                          leading: Icon(Icons.phone),
-                                          title: Text("Phone"),
-                                          subtitle: Text("+255723105974"),
+                                          leading: Icon(Icons.password),
+                                          title: Text("Password"),
+                                          subtitle: Text("*********"),
                                         ),
                                         
                                       ],
@@ -162,7 +174,115 @@ class _ProfilePageState extends State<Profile>{
                               ],
                             ),
                           ),
-                        )
+                        ),
+
+                        Container(
+                          padding: EdgeInsets.all(10),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Container(
+                                padding: const EdgeInsets.only(
+                                    left: 8.0, bottom: 4.0),
+                                alignment: Alignment.topLeft,
+                                child: Text(
+                                  "My Books",
+                                  style: TextStyle(
+                                    color: Colors.black87,
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 16,
+                                  ),
+                                  textAlign: TextAlign.left,
+                                ),
+                              ),
+                              ElevatedButton(
+                                onPressed: () {
+                                  // Navigator.push(
+                                  //   context,
+                                  //   MaterialPageRoute(
+                                  //       builder: (context) => UserBooksCollection()),
+                                  // );
+                                },
+                                child: Text('View All'),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Card(
+                          child: Container(
+                            alignment: Alignment.topLeft,
+                            padding: EdgeInsets.all(15),
+                            child: SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: Row(
+                                children: <Widget>[
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                        color: Colors.grey,
+                                        width: 1,
+                                      ),
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: Image.asset(
+                                      'assets/images/book1.jpg',
+                                      width: 150,
+                                      height: 200,
+                                    ),
+                                  ),
+                                  SizedBox(width: 10),
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                        color: Colors.grey,
+                                        width: 1,
+                                      ),
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: Image.asset(
+                                      'assets/images/book2.jpg',
+                                      width: 150,
+                                      height: 200,
+                                    ),
+                                  ),
+                                  SizedBox(width: 10),
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                        color: Colors.grey,
+                                        width: 1,
+                                      ),
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: Image.asset(
+                                      'assets/images/book3.jpg',
+                                      width: 150,
+                                      height: 200,
+                                    ),
+                                  ),
+                                  SizedBox(width: 10),
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                        color: Colors.grey,
+                                        width: 1,
+                                      ),
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: Image.asset(
+                                      'assets/images/book4.jpg',
+                                      width: 150,
+                                      height: 200,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+
+
+
                       ],
                     ),
                   )
