@@ -5,6 +5,10 @@ import 'package:booksgrid/screens/notifications.dart';
 import 'package:booksgrid/screens/settings.dart';
 import 'package:booksgrid/screens/sign_in.dart';
 import 'package:booksgrid/screens/sign_up.dart';
+import 'package:booksgrid/screens/user_books.dart';
+import 'package:booksgrid/screens/user_information.dart';
+// import 'package:booksgrid/screens/user_books.dart';
+// import 'package:booksgrid/screens/user_information.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -421,29 +425,41 @@ class _ProfilePageState extends State<Profile> {
                     '${loggedInUser.userName}\n',
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
-                  SizedBox(height: 20,),
-                  Text('${loggedInUser.userName}\n',
-
-                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)
-                  ,),
-                  SizedBox(height: 20,),
-                  Text('Student', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
-                  SizedBox(height: 10,),
                   Container(
                     padding: EdgeInsets.all(10),
                     child: Column(
                       children: <Widget>[
                         Container(
-                          padding: const EdgeInsets.only(left: 8.0, bottom: 4.0),
-                          alignment: Alignment.topLeft,
-                          child: Text(
-                            "User Information",
-                            style: TextStyle(
-                              color: Colors.black87,
-                              fontWeight: FontWeight.w500,
-                              fontSize: 16,
-                            ),
-                            textAlign: TextAlign.left,
+                          padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Container(
+                                padding: const EdgeInsets.only(
+                                    left: 8.0, bottom: 4.0),
+                                alignment: Alignment.topLeft,
+                                child: Text(
+                                  "User Information",
+                                  style: TextStyle(
+                                    color: Colors.black87,
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 16,
+                                  ),
+                                  textAlign: TextAlign.left,
+                                ),
+                              ),
+                              IconButton(
+                                icon: Icon(Icons.edit),
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            UserInformationPage()),
+                                  );
+                                },
+                              ),
+                            ],
                           ),
                         ),
                         Card(
@@ -464,9 +480,9 @@ class _ProfilePageState extends State<Profile> {
                                               Text('${loggedInUser.email}'),
                                         ),
                                         ListTile(
-                                          leading: Icon(Icons.phone),
-                                          title: Text("Phone"),
-                                          subtitle: Text("+255723105974"),
+                                          leading: Icon(Icons.password),
+                                          title: Text("Unique Id"),
+                                          subtitle: Text("***********"),
                                         ),
                                       ],
                                     ),
@@ -475,7 +491,77 @@ class _ProfilePageState extends State<Profile> {
                               ],
                             ),
                           ),
-                        )
+                        ),
+                        Container(
+                          padding: EdgeInsets.all(10),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Container(
+                                padding: const EdgeInsets.only(
+                                    left: 8.0, bottom: 4.0),
+                                alignment: Alignment.topLeft,
+                                child: Text(
+                                  "My Books",
+                                  style: TextStyle(
+                                    color: Colors.black87,
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 16,
+                                  ),
+                                  textAlign: TextAlign.left,
+                                ),
+                              ),
+                              // View All Button
+                              ElevatedButton(
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            UserBooksCollection()),
+                                  );
+                                },
+                                child: Text('View All'),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Card(
+                          child: Container(
+                            alignment: Alignment.topLeft,
+                            padding: EdgeInsets.all(15),
+                            child: SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: Row(
+                                // Limit the number of book images to show to 5 book images.
+                                // _listItem.take(5).map((item))
+                                // A user has to click on 'View All' to see all the book images he/she uploaded to the application.
+                                children: _listItem.map((item) {
+                                  return Row(
+                                    children: [
+                                      Container(
+                                          decoration: BoxDecoration(
+                                            border: Border.all(
+                                              color: Colors.grey,
+                                              width: 1,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                          ),
+                                          child: Image(
+                                            image: NetworkImage(item),
+                                            width: 150,
+                                            height: 200,
+                                          )),
+                                      // Spacing between book images
+                                      SizedBox(width: 10),
+                                    ],
+                                  );
+                                }).toList(),
+                              ),
+                            ),
+                          ),
+                        ),
                       ],
                     ),
                   )
