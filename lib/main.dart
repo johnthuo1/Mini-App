@@ -1,5 +1,6 @@
-// ignore_for_file: prefer_const_constructors, depend_on_referenced_packages, unused_import, unnecessary_this, sdk_version_constructor_tearoffs, non_constant_identifier_names, use_build_context_synchronously
+// ignore_for_file: prefer_const_constructors, depend_on_referenced_packages, unused_import, unnecessary_this, sdk_version_constructor_tearoffs, non_constant_identifier_names, use_build_context_synchronously, unnecessary_null_comparison
 
+import 'package:booksgrid/screens/book_details.dart';
 import 'package:booksgrid/screens/notifications.dart';
 import 'package:booksgrid/screens/profile.dart';
 import 'package:booksgrid/screens/sign_in.dart';
@@ -9,21 +10,19 @@ import 'package:booksgrid/screens/upload_book.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'model/user_model.dart';
 
-import 'dart:typed_data';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
-
 // Initialize firebase
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(MaterialApp(debugShowCheckedModeBanner: false, home: LoginScreen()));
+  runApp(MaterialApp(debugShowCheckedModeBanner: false, 
+  home: LoginScreen()));
 }
 
 class HomePage extends StatefulWidget {
@@ -60,35 +59,30 @@ class _HomePageState extends State<HomePage> {
         () {},
       );
     });
+    fetchBookImages();
   }
+final List<String> _listItem = [];
+final List<String> _isbnList = [];
 
-  // final List<String> _listItem = [];
-
-  // Future<void> fetchBooks() async {
-  //   final QuerySnapshot<Map<String, dynamic>> querySnapshot =
-  //       await FirebaseFirestore.instance.collection('books').get();
-  //   final List<QueryDocumentSnapshot<Map<String, dynamic>>> docs =
-  //       querySnapshot.docs;
-  //   for (final doc in docs) {
-  //     final frontImageUrl = doc.get('frontImageUrl');
-  //     final response = await http.get(Uri.parse(frontImageUrl));
-  //     final imageData = response.bodyBytes;
-  //     final base64Image = base64Encode(imageData);
-  //     _listItem.add(base64Image);
-  //   }
-  // }
-  final List<String> _listItem = [
-    'assets/images/book1.jpg',
-    'assets/images/book2.jpg',
-    'assets/images/book3.jpg',
-    'assets/images/book5.jpg',
-    'assets/images/book6.jpg',
-    'assets/images/book7.jpg',
-    'assets/images/book8.jpg',
-    'assets/images/book9.jpg',
-    'assets/images/book10.jpg',
-  ];
-
+Future<void> fetchBookImages() async {
+  final QuerySnapshot<Map<String, dynamic>> querySnapshot =
+      await FirebaseFirestore.instance.collection('books').get();
+  final List<QueryDocumentSnapshot<Map<String, dynamic>>> docs = querySnapshot.docs;
+  for (final doc in docs) {
+    final frontImageUrl = doc.get('frontImageUrl');
+    final isbn = doc.get('isbn');
+    try {
+      setState(() {
+        _listItem.add(frontImageUrl);
+        _isbnList.add(isbn);
+      });
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error loading image: $e');
+      }
+    }
+  }
+}
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -167,24 +161,6 @@ class _HomePageState extends State<HomePage> {
                           ),
                         ),
                       ),
-                      // Align(
-                      //   alignment: AlignmentDirectional(-0.1, -0.2),
-                      //   child: Padding(
-                      //     padding: EdgeInsetsDirectional.fromSTEB(0, 30, 0, 2),
-                      //     child: Container(
-                      //       width: 129,
-                      //       height: 129,
-                      //       clipBehavior: Clip.antiAlias,
-                      //       decoration: BoxDecoration(
-                      //         shape: BoxShape.circle,
-                      //       ),
-                      //       child: Image.network(
-                      //         'https://picsum.photos/seed/716/600',
-                      //         fit: BoxFit.cover,
-                      //       ),
-                      //     ),
-                      //   ),
-                      // ),
 
                       Align(
                         alignment: AlignmentDirectional(-0.15, -0.25),
@@ -233,7 +209,7 @@ class _HomePageState extends State<HomePage> {
                           color: Color(0xFF303030),
                           size: 20,
                         ),
-                        tileColor: Color.fromARGB(255, 255, 255, 255),
+                        tileColor: Colors.white,
                         dense: false,
                       ),
                     ),
@@ -266,7 +242,7 @@ class _HomePageState extends State<HomePage> {
                           color: Color(0xFF303030),
                           size: 20,
                         ),
-                        tileColor: Color.fromARGB(255, 255, 255, 255),
+                        tileColor: Colors.white,
                         dense: false,
                       ),
                     )),
@@ -297,7 +273,7 @@ class _HomePageState extends State<HomePage> {
                           color: Color(0xFF303030),
                           size: 20,
                         ),
-                        tileColor: Color.fromARGB(255, 255, 255, 255),
+                        tileColor: Colors.white,
                         dense: false,
                       ),
                     )),
@@ -328,7 +304,7 @@ class _HomePageState extends State<HomePage> {
                         color: Color(0xFF303030),
                         size: 20,
                       ),
-                      tileColor: Color.fromARGB(255, 255, 255, 255),
+                      tileColor: Colors.white,
                       dense: false,
                     ),
                   ),
@@ -353,7 +329,7 @@ class _HomePageState extends State<HomePage> {
                       color: Color(0xFF303030),
                       size: 20,
                     ),
-                    tileColor: Color.fromARGB(255, 255, 255, 255),
+                    tileColor: Colors.white,
                     dense: false,
                   ),
                 ),
@@ -376,7 +352,7 @@ class _HomePageState extends State<HomePage> {
                             fontFamily: 'Poppins',
                             fontWeight: FontWeight.bold),
                       ),
-                      tileColor: Color.fromARGB(255, 255, 255, 255),
+                      tileColor: Colors.white,
                       dense: false,
                       contentPadding:
                           EdgeInsetsDirectional.fromSTEB(40, 0, 0, 0),
@@ -446,39 +422,56 @@ class _HomePageState extends State<HomePage> {
               SizedBox(
                 height: 20,
               ),
-              Expanded(
-                  child: GridView.count(
-                crossAxisCount: 2,
-                crossAxisSpacing: 10,
-                mainAxisSpacing: 10,
-                children: _listItem
-                    .map((item) => Card(
-                          color: Colors.blue,
-                          elevation: 0,
-                          child: Container(
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20),
-                                image: DecorationImage(
-                                    image: AssetImage(item),
-                                    fit: BoxFit.cover)),
-                            child: Transform.translate(
-                              offset: Offset(50, -50),
+
+        Expanded(
+                child: GridView.count(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 10,
+                  mainAxisSpacing: 10,
+                  children: _listItem
+                      .map((item) => GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: ((context) => (BookDetailsPage(
+                                          isbn: _isbnList[
+                                              _listItem.indexOf(item)])))));
+                            },
+                            child: Card(
+                              color: Colors.blue,
+                              elevation: 0,
                               child: Container(
-                                margin: EdgeInsets.symmetric(
-                                    horizontal: 65, vertical: 63),
                                 decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    color: Colors.white),
-                                child: Icon(
-                                  Icons.bookmark_border,
-                                  size: 15,
+                                  borderRadius: BorderRadius.circular(20),
+                                image: item != null
+                                      ? DecorationImage(
+                                          image: NetworkImage(item),
+                                          fit: BoxFit.cover,
+                                        )
+                                      : null,
+                                ),
+                                child: Transform.translate(
+                                  offset: Offset(50, -50),
+                                  child: Container(
+                                    margin: EdgeInsets.symmetric(
+                                        horizontal: 65, vertical: 63),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      color: Colors.white,
+                                    ),
+                                    child:
+                                        Icon(Icons.bookmark_border, size: 15),
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                        ))
-                    .toList(),
-              ))
+                          ))
+                      .toList(),
+                ),
+              )
+
+
             ],
           ),
         ),

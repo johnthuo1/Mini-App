@@ -25,6 +25,7 @@ class _BookUploadPageState extends State<BookUploadPage> {
   final _book = FirebaseFirestore.instance;
   late User? user;
   late UserModel loggedInUser;
+  final _descriptionScrollController = ScrollController();
 // Get the user document from Firestore using the user's UID
   final Color _buttonColor = Colors.grey;
   final _formKey = GlobalKey<FormState>();
@@ -40,20 +41,21 @@ class _BookUploadPageState extends State<BookUploadPage> {
   final TextEditingController _isbnController = TextEditingController();
   final TextEditingController _categoryController = TextEditingController();
   final TextEditingController _uploadedByController = TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
 
   @override
   void initState() {
-  super.initState();
-  user = FirebaseAuth.instance.currentUser;
-  FirebaseFirestore.instance
-      .collection('users')
-      .doc(user!.uid)
-      .get()
-      .then((value) {
-    loggedInUser = UserModel.fromMap(value.data());
-    _uploadedByController.text = loggedInUser.userName!;
-    setState(() {});
-  });
+    super.initState();
+    user = FirebaseAuth.instance.currentUser;
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(user!.uid)
+        .get()
+        .then((value) {
+      loggedInUser = UserModel.fromMap(value.data());
+      _uploadedByController.text = loggedInUser.userName!;
+      setState(() {});
+    });
   }
 
   @override
@@ -62,6 +64,7 @@ class _BookUploadPageState extends State<BookUploadPage> {
     _titleController.dispose();
     _isbnController.dispose();
     _categoryController.dispose();
+    _descriptionController.dispose();
     _uploadedByController.dispose();
     super.dispose();
   }
@@ -175,6 +178,7 @@ class _BookUploadPageState extends State<BookUploadPage> {
                   },
                 ),
                 SizedBox(height: 16.0),
+
                 DropdownButtonFormField<String>(
                   decoration: InputDecoration(
                     labelText: 'Category',
@@ -210,6 +214,33 @@ class _BookUploadPageState extends State<BookUploadPage> {
                 ),
 
                 SizedBox(height: 16.0),
+                // ignore: sized_box_for_whitespace
+                Container(
+                  height: 50.0,
+                  child: Scrollbar(
+                    isAlwaysShown: true,
+                    controller: _descriptionScrollController,
+                    child: SingleChildScrollView(
+                      controller: _descriptionScrollController,
+                      child: TextFormField(
+                        controller: _descriptionController,
+                        maxLines: null, // Allow user to enter multiple lines
+                        decoration: InputDecoration(
+                          labelText: 'Book Description',
+                        ),
+                        validator: (value) {
+                          if (value == null ||
+                              value.trim().split(' ').length > 100) {
+                            return 'Please enter a brief description of the book (maximum 100 words)';
+                          }
+                          return null;
+                        },
+                      ),
+                    ),
+                  ),
+                ),
+
+                SizedBox(height: 16.0),
                 TextFormField(
                   controller: _uploadedByController,
                   decoration: InputDecoration(
@@ -226,7 +257,7 @@ class _BookUploadPageState extends State<BookUploadPage> {
                 Column(
                   children: [
                     Padding(
-                      padding: EdgeInsets.all(25.0),
+                      padding: EdgeInsets.fromLTRB(10, 40, 10, 20),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
@@ -246,17 +277,16 @@ class _BookUploadPageState extends State<BookUploadPage> {
                       children: [
                         SizedBox(height: 8.0),
                         Flexible(
-                       child: Text(_frontImageFile!=null
-                                  ? path.basename(_frontImageFile!.path)
-                                  : 'No front image selected'),
-                                  ),
+                          child: Text(_frontImageFile != null
+                              ? path.basename(_frontImageFile!.path)
+                              : 'No front image selected'),
+                        ),
                         SizedBox(width: 16.0),
                         Flexible(
-                            child: Text(_backImageFile!=null
-                                  ? path.basename(_backImageFile!.path)
-                                  : 'No back image selected'),
-                                  ),
-                                
+                          child: Text(_backImageFile != null
+                              ? path.basename(_backImageFile!.path)
+                              : 'No back image selected'),
+                        ),
                         SizedBox(height: 8.0),
                       ],
                     ),
@@ -267,67 +297,72 @@ class _BookUploadPageState extends State<BookUploadPage> {
                 SizedBox(
                   width: 200.0,
                   child: Center(
-                    child: ElevatedButton(
-                      onPressed: () async {
-                        if (_formKey.currentState!.validate()) {
-                          try {
-                            final frontImageUrl =
-                                await _uploadImageToStorage(_frontImageFile!);
-                            final backImageUrl =
-                                await _uploadImageToStorage(_backImageFile!);
+                    child: Padding(
+                      padding: EdgeInsets.fromLTRB(10, 20, 10, 0),
+                      child: ElevatedButton(
+                        onPressed: () async {
+                          if (_formKey.currentState!.validate()) {
+                            try {
+                              final frontImageUrl =
+                                  await _uploadImageToStorage(_frontImageFile!);
+                              final backImageUrl =
+                                  await _uploadImageToStorage(_backImageFile!);
 
-                            BookModel newBook = BookModel(
-                              author: _authorController.text,
-                              title: _titleController.text,
-                              isbn: _isbnController.text,
-                              category: _selectedCategory,
-                              frontImageUrl: frontImageUrl,
-                              backImageUrl: backImageUrl,
-                              uploadedBy: _uploadedByController.text,
-                            );
+                              BookModel newBook = BookModel(
+                                author: _authorController.text,
+                                title: _titleController.text,
+                                isbn: _isbnController.text,
+                                category: _selectedCategory,
+                                description: _descriptionController.text,
+                                frontImageUrl: frontImageUrl,
+                                backImageUrl: backImageUrl,
+                                uploadedBy: _uploadedByController.text,
+                              );
 
-                            Map<String, dynamic> data = newBook.toMap();
+                              Map<String, dynamic> data = newBook.toMap();
 
-                            await FirebaseFirestore.instance
-                                .collection('books')
-                                .add(data);
+                              await FirebaseFirestore.instance
+                                  .collection('books')
+                                  .add(data);
 
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text(
-                                    '${newBook.title} novel uploaded successfully!'),
-                              ),
-                            );
-                            Navigator.pushAndRemoveUntil(
-                                (context),
-                                MaterialPageRoute(
-                                    builder: (context) => HomePage()),
-                                (route) => false);
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                      '${newBook.title} novel uploaded successfully!'),
+                                ),
+                              );
+                              Navigator.pushAndRemoveUntil(
+                                  (context),
+                                  MaterialPageRoute(
+                                      builder: (context) => HomePage()),
+                                  (route) => false);
 
-                            _authorController.clear();
-                            _titleController.clear();
-                            _isbnController.clear();
-                            _categoryController.clear();
-                            setState(() {
-                              _frontImageFile = null;
-                              _backImageFile = null;
-                            });
-                          } on FirebaseException catch (e) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text('Failed to upload book: $e'),
-                              ),
-                            );
+                              _authorController.clear();
+                              _titleController.clear();
+                              _isbnController.clear();
+                              _categoryController.clear();
+                              _descriptionController.clear();
+                              setState(() {
+                                _frontImageFile = null;
+                                _backImageFile = null;
+                              });
+                            } on FirebaseException catch (e) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text('Failed to upload book: $e'),
+                                ),
+                              );
+                            }
                           }
-                        }
-                      },
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(Icons.cloud_upload),
-                          SizedBox(width: 8.0),
-                          Text('Upload'),
-                        ],
+                        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.cloud_upload),
+                            SizedBox(width: 8.0),
+                            Text('Upload'),
+                          ],
+                        ),
                       ),
                     ),
                   ),

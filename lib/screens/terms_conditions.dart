@@ -55,7 +55,7 @@ class _TermsAndConditionsPageState extends State<TermsAndConditionsPage> {
                   },
                 ),
                 Text(
-                  'I have read and agree to terms and conditions',
+                  'Agree to the Terms?',
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
               ],

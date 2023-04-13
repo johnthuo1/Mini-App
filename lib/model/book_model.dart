@@ -6,6 +6,7 @@ class BookModel {
   String? author;
   String? isbn;
   String? category;
+  String? description;
   String? frontImageUrl;
   String? backImageUrl;
   String? uploadedBy;
@@ -15,6 +16,7 @@ class BookModel {
       this.author,
       this.isbn,
       this.category,
+      this.description,
       this.frontImageUrl,
       this.backImageUrl,
       this.uploadedBy});
@@ -26,6 +28,7 @@ class BookModel {
       author: map['author'],
       isbn: map['isbn'],
       category: map['category'],
+      description: map['description'],
       frontImageUrl: map['frontImageUrl'],
       backImageUrl: map['backImageUrl'],
       uploadedBy: map['uploadedBy'],
@@ -39,6 +42,7 @@ class BookModel {
       'author': author,
       'isbn': isbn,
       'category': category,
+      'description': description,
       'frontImageUrl': frontImageUrl,
       'backImageUrl': backImageUrl,
       'uploadedBy': uploadedBy,
