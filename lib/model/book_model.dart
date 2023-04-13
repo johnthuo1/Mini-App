@@ -1,5 +1,5 @@
 // ignore_for_file: unused_import
-// Book Model to use for db
+// Book Model
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class BookModel {
