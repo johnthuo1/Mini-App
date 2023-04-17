@@ -34,6 +34,8 @@ List of Application Pages (and the status of the UI design)
 - Notifications Page (done. To view, logout and choose to signup instead of signing in. There you can click on the terms and conditions to view)
 - Settings Page (done)
 - Profile Page (done)
+- user_books  (done)
+- user_information (done)
 
 We have implemented 9 of the 10 UI/UX designed screens. That makes 90% as required. The Homepage and the drawer are all within the main.dart file.
 
@@ -43,10 +45,13 @@ We have implemented 9 of the 10 UI/UX designed screens. That makes 90% as requir
 - Sign In
 - Home
 - Drawer (UI/UX fully done, but yet to be put on all pages. Only available on homepage)
-- Notifications
-- Profile (UI/UX done but is not connected to the database hence does not display profile details of a specific user)
+- Notifications (pending)
+- Profile 
 - Settings
-- upload_book (Not fully done as some part requires database connection. every other thing is done for this page)
+- upload_book
+- book_details (pending)
+- user_books
+- user_information
 
 ###Page not yet implemented:
 
