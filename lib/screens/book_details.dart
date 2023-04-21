@@ -1,6 +1,11 @@
-// ignore_for_file: library_private_types_in_public_api, prefer_const_constructors, unused_field, use_build_context_synchronously
+// ignore_for_file: library_private_types_in_public_api, prefer_const_constructors, unused_field, use_build_context_synchronously, unnecessary_this, unused_local_variable
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+
+import '../model/user_model.dart';
 
 class BookDetailsPage extends StatefulWidget {
   final String isbn;
@@ -11,9 +16,15 @@ class BookDetailsPage extends StatefulWidget {
   _BookDetailsPageState createState() => _BookDetailsPageState();
 }
 
+
+
 class _BookDetailsPageState extends State<BookDetailsPage> {
+  User? user = FirebaseAuth.instance.currentUser;
+  UserModel loggedInUser = UserModel();
+
   late Future<QuerySnapshot<Map<String, dynamic>>> _bookFuture;
   bool _bookBorrowed = false;
+  Color _buttonColor = Colors.blue;
 
   @override
   void initState() {
@@ -22,6 +33,26 @@ class _BookDetailsPageState extends State<BookDetailsPage> {
         .collection('books')
         .where('isbn', isEqualTo: widget.isbn)
         .get();
+
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(user!.uid)
+        .get()
+        .then((value) {
+      this.loggedInUser = UserModel.fromMap(value.data());
+      setState(() {});
+    });
+
+    // Retrieve the state of the button from persistent storage
+    SharedPreferences.getInstance().then((prefs) {
+      bool bookBorrowed = prefs.getBool('bookBorrowed') ?? false;
+      setState(() {
+        _bookBorrowed = bookBorrowed;
+        if (_bookBorrowed) {
+          _buttonColor = Colors.grey;
+        }
+      });
+    });
   }
 
   void _onBorrowButtonPressed() async {
@@ -29,6 +60,14 @@ class _BookDetailsPageState extends State<BookDetailsPage> {
         .collection('books')
         .where('isbn', isEqualTo: widget.isbn)
         .get();
+
+    if (snapshot.docs.isEmpty) {
+      // Show an error message that the book was not found
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('This book was not found.')),
+      );
+      return;
+    }
 
     final book = snapshot.docs.first;
     if (book['borrowed'] == true) {
@@ -39,20 +78,36 @@ class _BookDetailsPageState extends State<BookDetailsPage> {
       return;
     }
 
+    // Get the user who uploaded the book
+    final uploadedBy = book['uploadedBy'];
+    final userSnapshot = await FirebaseFirestore.instance
+        .collection('users')
+        .where('userName', isEqualTo: uploadedBy)
+        .get();
+
+    // Get the email address of the user who uploaded the book
+    final uploadedByEmail = userSnapshot.docs.first['email'];
+
     // Update the 'borrowed' field to true
     book.reference.update({'borrowed': true});
 
     // Set the borrowed flag to true and update the UI
     setState(() {
       _bookBorrowed = true;
+      _buttonColor = Colors.grey;
     });
 
     // Show a confirmation message that the book has been borrowed
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('You have borrowed this book.')),
+      SnackBar(
+          content: Text(
+              'You have borrowed this book. Contact $uploadedByEmail to arrange pick up.')),
     );
-  }
 
+    // Save button state to persistent Storage
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool('bookBorrowed', true);
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -114,7 +169,7 @@ class _BookDetailsPageState extends State<BookDetailsPage> {
                         width: double.infinity,
                         height: 20,
                         decoration: BoxDecoration(
-                          color: _bookBorrowed ? Colors.grey : Colors.blue,
+                          color: _buttonColor,
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Center(
