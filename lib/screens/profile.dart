@@ -1,6 +1,7 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, unused_import, unused_field, unnecessary_null_comparison, unnecessary_new, library_private_types_in_public_api, depend_on_referenced_packages, unused_local_variable, use_build_context_synchronously
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, unused_import, unused_field, unnecessary_null_comparison, unnecessary_new, library_private_types_in_public_api, depend_on_referenced_packages, unused_local_variable, use_build_context_synchronously, prefer_final_fields
 
 import 'package:booksgrid/main.dart';
+import 'package:booksgrid/screens/book_details.dart';
 import 'package:booksgrid/screens/notifications.dart';
 import 'package:booksgrid/screens/settings.dart';
 import 'package:booksgrid/screens/sign_in.dart';
@@ -22,11 +23,10 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<Profile> {
-  // final double _drawerIconSize = 24;
-  // final double _drawerFontSize = 17;
   User? user = FirebaseAuth.instance.currentUser;
   UserModel loggedInUser = UserModel();
-  final List<String> _listItem = [];
+  List<String> _listItem = [];
+  List<String> _isbnList = [];
   String? username;
 
   @override
@@ -38,14 +38,14 @@ class _ProfilePageState extends State<Profile> {
         .get()
         .then((value) {
       loggedInUser = UserModel.fromMap(value.data());
-      username = loggedInUser.userName!;
-      setState(
-        () {},
-      );
+      setState(() {
+        username = loggedInUser.userName!;
+        fetchUserBookImages(username);
+      });
     });
-    fetchUserBookImages(username);
   }
 
+// Check the error here once done with the Nofications System
   Future<List<String>> fetchUserBookImages(username) async {
     QuerySnapshot<Map<String, dynamic>> querySnapshot = await FirebaseFirestore
         .instance
@@ -53,10 +53,16 @@ class _ProfilePageState extends State<Profile> {
         .where('uploadedBy', isEqualTo: username)
         .get();
 
+    // Clear
+    _listItem.clear();
+    _isbnList.clear();
+
     for (var doc in querySnapshot.docs) {
       if (doc.data().containsKey('frontImageUrl')) {
         String imageUrl = doc.data()['frontImageUrl'];
+        String isbn = doc.data()['isbn'];
         _listItem.add(imageUrl);
+        _isbnList.add(isbn);
       }
     }
 
@@ -95,8 +101,11 @@ class _ProfilePageState extends State<Profile> {
               right: 16,
             ),
             child: GestureDetector(
-              onTap: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=> (NotificationsPage())));
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => (NotificationsPage())));
               },
               child: Stack(
                 children: <Widget>[
@@ -129,8 +138,7 @@ class _ProfilePageState extends State<Profile> {
           )
         ],
       ),
-      // You can add Drawer code here if necessary. Currently, it's affecting performance of the app
-     
+      // If necessary, you can add the drawer code here
       body: SingleChildScrollView(
         child: Stack(
           children: [
@@ -272,41 +280,60 @@ class _ProfilePageState extends State<Profile> {
                             ],
                           ),
                         ),
-                        Card(
-                          child: Container(
-                            alignment: Alignment.topLeft,
-                            padding: EdgeInsets.all(15),
-                            child: SingleChildScrollView(
-                              scrollDirection: Axis.horizontal,
-                              child: Row(
-                                // Limit the number of book images to show to 5 book images.
-                                // _listItem.take(5).map((item))
-                                // A user has to click on 'View All' to see all the book images he/she uploaded to the application.
-                                children: _listItem.map((item) {
-                                  return Row(
-                                    children: [
-                                      Container(
-                                          decoration: BoxDecoration(
-                                            border: Border.all(
-                                              color: Colors.grey,
-                                              width: 1,
-                                            ),
-                                            borderRadius:
-                                                BorderRadius.circular(10),
+
+                        // Displays the user books collection he/she uploaded to the application.
+                        FutureBuilder<List<String>>(
+                          future: fetchUserBookImages(username),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              List<String> bookImages = snapshot.data!;
+                              return SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                child: Row(
+                                  children: bookImages.map((item) {
+                                    return GestureDetector(
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: ((context) =>
+                                                (BookDetailsPage(
+                                                  isbn: _isbnList[
+                                                      _listItem.indexOf(item)],
+                                                ))),
                                           ),
-                                          child: Image(
-                                            image: NetworkImage(item),
-                                            width: 150,
-                                            height: 200,
-                                          )),
-                                      // Spacing between book images
-                                      SizedBox(width: 10),
-                                    ],
-                                  );
-                                }).toList(),
-                              ),
-                            ),
-                          ),
+                                        );
+                                      },
+                                      child: Row(
+                                        children: [
+                                          Container(
+                                            decoration: BoxDecoration(
+                                              border: Border.all(
+                                                color: Colors.grey,
+                                                width: 1,
+                                              ),
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                            ),
+                                            child: Image(
+                                              image: NetworkImage(item),
+                                              width: 150,
+                                              height: 200,
+                                            ),
+                                          ),
+                                          SizedBox(width: 10),
+                                        ],
+                                      ),
+                                    );
+                                  }).toList(),
+                                ),
+                              );
+                            } else if (snapshot.hasError) {
+                              return Text('Error: ${snapshot.error}');
+                            } else {
+                              return CircularProgressIndicator();
+                            }
+                          },
                         ),
                       ],
                     ),
