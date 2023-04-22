@@ -1,4 +1,6 @@
-// ignore_for_file: prefer_const_constructors, depend_on_referenced_packages, unused_import, unnecessary_this, sdk_version_constructor_tearoffs, non_constant_identifier_names, use_build_context_synchronously, unnecessary_null_comparison
+// ignore_for_file: prefer_const_constructors, depend_on_referenced_packages, unused_import, unnecessary_this, sdk_version_constructor_tearoffs, non_constant_identifier_names, use_build_context_synchronously, unnecessary_null_comparison, avoid_print, unused_field
+
+import 'dart:io';
 
 import 'package:booksgrid/screens/book_details.dart';
 import 'package:booksgrid/screens/notifications.dart';
@@ -7,22 +9,28 @@ import 'package:booksgrid/screens/sign_in.dart';
 import 'package:booksgrid/screens/sign_up.dart';
 import 'package:booksgrid/screens/settings.dart';
 import 'package:booksgrid/screens/upload_book.dart';
+import 'package:booksgrid/screens/upload_profile.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'model/user_model.dart';
+import 'package:path/path.dart' as path;
+import 'package:path/path.dart';
 
 // Initialize firebase
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(MaterialApp(debugShowCheckedModeBanner: false, 
-  home: LoginScreen()));
+  // For messaging purposes
+  await FirebaseMessaging.instance.getInitialMessage();
+  runApp(MaterialApp(debugShowCheckedModeBanner: false, home: LoginScreen()));
 }
 
 class HomePage extends StatefulWidget {
@@ -37,18 +45,12 @@ class _HomePageState extends State<HomePage> {
   User? user = FirebaseAuth.instance.currentUser;
   UserModel loggedInUser = UserModel();
 
-  final ImagePicker _picker = ImagePicker();
-
-  Future<void> _pickImages() async {
-    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
-    if (pickedFile != null) {
-      // do something with the selected image file
-    }
-  }
+  late String _ProfileImageUrl;
 
   @override
   void initState() {
     super.initState();
+    requestPermission();
     FirebaseFirestore.instance
         .collection('users')
         .doc(user!.uid)
@@ -61,28 +63,54 @@ class _HomePageState extends State<HomePage> {
     });
     fetchBookImages();
   }
-final List<String> _listItem = [];
-final List<String> _isbnList = [];
 
-Future<void> fetchBookImages() async {
-  final QuerySnapshot<Map<String, dynamic>> querySnapshot =
-      await FirebaseFirestore.instance.collection('books').get();
-  final List<QueryDocumentSnapshot<Map<String, dynamic>>> docs = querySnapshot.docs;
-  for (final doc in docs) {
-    final frontImageUrl = doc.get('frontImageUrl');
-    final isbn = doc.get('isbn');
-    try {
-      setState(() {
-        _listItem.add(frontImageUrl);
-        _isbnList.add(isbn);
-      });
-    } catch (e) {
-      if (kDebugMode) {
-        print('Error loading image: $e');
+  void requestPermission() async {
+    FirebaseMessaging messaging = FirebaseMessaging.instance;
+    NotificationSettings settings = await messaging.requestPermission(
+      alert: true,
+      announcement: false,
+      badge: true,
+      carPlay: false,
+      criticalAlert: false,
+      provisional: false,
+      sound: true,
+    );
+
+    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+      print("User granted permission");
+    } else if (settings.authorizationStatus ==
+        AuthorizationStatus.provisional) {
+      print("User granted provisional permission");
+    } else {
+      print("User declined or has not accepted permission");
+    }
+  }
+
+  final List<String> _listItem = [];
+  final List<String> _isbnList = [];
+  final List<String> _profList = [];
+
+  Future<void> fetchBookImages() async {
+    final QuerySnapshot<Map<String, dynamic>> querySnapshot =
+        await FirebaseFirestore.instance.collection('books').get();
+    final List<QueryDocumentSnapshot<Map<String, dynamic>>> docs =
+        querySnapshot.docs;
+    for (final doc in docs) {
+      final frontImageUrl = doc.get('frontImageUrl');
+      final isbn = doc.get('isbn');
+      try {
+        setState(() {
+          _listItem.add(frontImageUrl);
+          _isbnList.add(isbn);
+        });
+      } catch (e) {
+        if (kDebugMode) {
+          print('Error loading image: $e');
+        }
       }
     }
   }
-}
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -133,6 +161,8 @@ Future<void> fetchBookImages() async {
                           child: Row(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
+                              // enable change of profile picture
+
                               Container(
                                 width: 129,
                                 height: 129,
@@ -140,19 +170,28 @@ Future<void> fetchBookImages() async {
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
                                 ),
-                                child: Image.network(
-                                  'https://picsum.photos/seed/716/600',
+                              child: Image.network(loggedInUser.profilePicture?.isNotEmpty == true
+                                  ? '${loggedInUser.profilePicture}'
+                                    : 'https://picsum.photos/seed/716/600',
                                   fit: BoxFit.cover,
                                 ),
                               ),
+
                               SizedBox(width: 10),
+
                               InkWell(
-                                onTap: _pickImages,
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => uploadProfile()),
+                                  );
+                                },
                                 child: SizedBox(
                                   width: 50,
                                   height: 50,
                                   child: Icon(
-                                    Icons.camera_alt,
+                                    Icons.edit,
                                     color: Colors.white,
                                   ),
                                 ),
@@ -161,7 +200,6 @@ Future<void> fetchBookImages() async {
                           ),
                         ),
                       ),
-
                       Align(
                         alignment: AlignmentDirectional(-0.15, -0.25),
                         child: Padding(
@@ -422,7 +460,7 @@ Future<void> fetchBookImages() async {
               SizedBox(
                 height: 20,
               ),
-        // Gridview to display the collection of book images in the Application\
+              // Gridview to display the collection of book images in the Application\
               Expanded(
                 child: GridView.count(
                   crossAxisCount: 2,
@@ -473,7 +511,6 @@ Future<void> fetchBookImages() async {
                       .toList(),
                 ),
               ),
-              
             ],
           ),
         ),
