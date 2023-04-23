@@ -62,7 +62,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                 child: Text("Alibrary&",
                 style: GoogleFonts.arizonia(
                   color: Colors.blue,
-                  fontSize: 50,
+                  fontSize: 60,
                   fontWeight: FontWeight.bold,
                 ),),
               ),
