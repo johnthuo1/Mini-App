@@ -3,6 +3,7 @@
 import 'package:booksgrid/screens/sign_up.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class TermsAndConditionsPage extends StatefulWidget {
   const TermsAndConditionsPage({Key? key}) : super(key: key);
@@ -13,6 +14,30 @@ class TermsAndConditionsPage extends StatefulWidget {
 
 class _TermsAndConditionsPageState extends State<TermsAndConditionsPage> {
   bool _isChecked = false;
+  bool _isButtonEnabled = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadAgreement();
+  }
+
+  Future<void> _loadAgreement() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _isChecked = prefs.getBool('agreement') ?? false;
+      _isButtonEnabled = _isChecked;
+    });
+  }
+
+  Future<void> _saveAgreement(bool value) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('agreement', value);
+    setState(() {
+      _isChecked = value;
+      _isButtonEnabled = value;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,9 +74,7 @@ class _TermsAndConditionsPageState extends State<TermsAndConditionsPage> {
                 Checkbox(
                   value: _isChecked,
                   onChanged: (bool? value) {
-                    setState(() {
-                      _isChecked = value!;
-                    });
+                    _saveAgreement(value ?? false);
                   },
                 ),
                 Text(
@@ -62,7 +85,7 @@ class _TermsAndConditionsPageState extends State<TermsAndConditionsPage> {
             ),
             const SizedBox(height: 16.0),
             ElevatedButton(
-              onPressed: _isChecked
+              onPressed: _isButtonEnabled
                   ? () {
                       Navigator.push(
                           context,
