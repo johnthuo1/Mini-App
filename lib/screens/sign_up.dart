@@ -23,7 +23,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final _auth = FirebaseAuth.instance;
   bool _accept = false;
 
-  // string for displaying the error Message
+  // string for displaying the error Messages
   String? errorMessage;
 
   // our form key
