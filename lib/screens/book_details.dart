@@ -220,4 +220,5 @@ class _BookDetailsPageState extends State<BookDetailsPage> {
       ),
     );
   }
+  // Add notifications
 }
