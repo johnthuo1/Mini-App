@@ -48,6 +48,11 @@ dependencies:
   image_picker: ^0.8.7+1
   firebase_storage: ^11.1.0
   font_awesome_flutter: ^10.4.0
+  shared_preferences: ^2.1.0
+  firebase_messaging: ^14.4.1
+  flutter_local_notifications: ^9.2.0
+  http: ^0.13.4
+  overlay_support: ^2.1.0
 
 
 dev_dependencies:
