@@ -14,6 +14,7 @@ import 'package:path/path.dart' as path;
 
 import '../model/user_model.dart';
 
+// user details
 class UserInformationPage extends StatefulWidget {
   const UserInformationPage({Key? key}) : super(key: key);
 
