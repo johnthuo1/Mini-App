@@ -1,8 +1,11 @@
-// ignore_for_file: library_private_types_in_public_api, prefer_const_constructors, unused_field, use_build_context_synchronously, unnecessary_this, unused_local_variable
+// ignore_for_file: library_private_types_in_public_api, prefer_const_constructors, unused_field, use_build_context_synchronously, unnecessary_this, unused_local_variable, prefer_final_fields
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+// import 'package:shared_preferences/shared_preferences.dart';
+// ignore: unused_import
+import 'package:firebase_messaging/firebase_messaging.dart';
+
 
 
 import '../model/user_model.dart';
@@ -42,17 +45,7 @@ class _BookDetailsPageState extends State<BookDetailsPage> {
       this.loggedInUser = UserModel.fromMap(value.data());
       setState(() {});
     });
-
-    // Retrieve the state of the button from persistent storage
-    SharedPreferences.getInstance().then((prefs) {
-      bool bookBorrowed = prefs.getBool('bookBorrowed') ?? false;
-      setState(() {
-        _bookBorrowed = bookBorrowed;
-        if (_bookBorrowed) {
-          _buttonColor = Colors.grey;
-        }
-      });
-    });
+  
   }
 
   void _onBorrowButtonPressed() async {
@@ -69,11 +62,26 @@ class _BookDetailsPageState extends State<BookDetailsPage> {
       return;
     }
 
+    // Dialog box for a book that is already borrowed
     final book = snapshot.docs.first;
     if (book['borrowed'] == true) {
-      // Show an error message that the book is already borrowed
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('This book is already borrowed.')),
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Error'),
+            content: Text('This book is already borrowed.'),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            actions: [
+              TextButton(
+                child: Text('OK'),
+                onPressed: () => Navigator.of(context).pop(),
+              ),
+            ],
+          );
+        },
       );
       return;
     }
@@ -94,20 +102,32 @@ class _BookDetailsPageState extends State<BookDetailsPage> {
     // Set the borrowed flag to true and update the UI
     setState(() {
       _bookBorrowed = true;
-      _buttonColor = Colors.grey;
     });
 
-    // Show a confirmation message that the book has been borrowed
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-          content: Text(
-              'You have borrowed this book. Contact $uploadedByEmail to arrange pick up.')),
+    // Show a confirmation message Dialog to show that the book has been borrowed
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          title: Text('Book Borrowed'),
+          content: Text('You have borrowed this book. Contact $uploadedByEmail to arrange pick up.'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('OK'),
+            ),
+          ],
+        );
+      },
     );
-
-    // Save button state to persistent Storage
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setBool('bookBorrowed', true);
   }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
