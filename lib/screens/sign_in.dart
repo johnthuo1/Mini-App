@@ -282,5 +282,6 @@ class _LoginScreenState extends State<LoginScreen> {
         print(error.code);
       }
     }
+    // Checked
   }
 }
