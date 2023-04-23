@@ -1,6 +1,9 @@
 // ignore_for_file: prefer_const_constructors, unused_import, library_private_types_in_public_api
 
+import 'package:booksgrid/screens/forgot_password.dart';
 import 'package:booksgrid/screens/sign_in.dart';
+import 'package:booksgrid/screens/upload_profile.dart';
+import 'package:booksgrid/screens/user_books.dart';
 import 'package:flutter/material.dart';
 import 'package:booksgrid/main.dart';
 
@@ -14,8 +17,6 @@ class SettingsPage extends StatefulWidget {
 class _SettingsPageState extends State<SettingsPage> {
   bool _allowNotifications = true;
   bool _showAvatar = true;
-  bool _allowStorageAccess = true;
-  bool _allowDataAccess = true;
   String _selectedLanguage = 'English';
 
   final List<String> _languages = ['English', 'Kinyarwanda', 'French'];
@@ -28,6 +29,50 @@ class _SettingsPageState extends State<SettingsPage> {
       ),
       body: ListView(
         children: [
+            ListTile(
+            title: Text('Change Profile Picture'),
+            trailing: Padding(
+              padding: EdgeInsets.all(10.0),
+              child: Icon(Icons.account_box_rounded)),
+            onTap: 
+              () async {
+                     // Change profile picture
+                     Navigator.pushReplacement(context,
+                      MaterialPageRoute(builder: (context) => (uploadProfile())));
+            },
+  
+          ),
+
+          Divider(),
+          ListTile(
+            title: Text('Change Password'),
+            trailing: Padding(
+              padding: EdgeInsets.all(10.0),
+              child: Icon(Icons.key)),
+            onTap: 
+              () async {
+                            // Take User to Forgot Password Page
+                     Navigator.pushReplacement(context,
+                      MaterialPageRoute(builder: (context) => ForgotPasswordPage()));
+            },
+  
+          ),
+          Divider(),
+
+          ListTile(
+            title: Text('My Books Collection'),
+            trailing: Padding(
+              padding: EdgeInsets.all(10.0),
+              child: Icon(Icons.library_books),
+            ),
+            onTap: () async {
+              // Take User to Forgot Password Page
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => UserBooksCollection()));
+            },
+          ),
+
+          Divider(),
+
           SwitchListTile(
             title: Text('Allow Notifications'),
             value: _allowNotifications,
@@ -37,14 +82,7 @@ class _SettingsPageState extends State<SettingsPage> {
               });
             },
           ),
-          Divider(),
-          ListTile(
-            title: Text('Privacy'),
-            trailing: Icon(Icons.arrow_forward_ios),
-            onTap: () {
-              // Navigate to Privacy page
-            },
-          ),
+
           Divider(),
           SwitchListTile(
             title: Text('Display Mode'),
@@ -52,26 +90,6 @@ class _SettingsPageState extends State<SettingsPage> {
             onChanged: (value) {
               setState(() {
                 _showAvatar = value;
-              });
-            },
-          ),
-          Divider(),
-          SwitchListTile(
-            title: Text('Allow Storage Access'),
-            value: _allowStorageAccess,
-            onChanged: (value) {
-              setState(() {
-                _allowStorageAccess = value;
-              });
-            },
-          ),
-          Divider(),
-          SwitchListTile(
-            title: Text('Access Data'),
-            value: _allowDataAccess,
-            onChanged: (value) {
-              setState(() {
-                _allowDataAccess = value;
               });
             },
           ),
