@@ -220,9 +220,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
       child: MaterialButton(
           padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
           minWidth: MediaQuery.of(context).size.width,
-          onPressed: () {
+          onPressed: _accept 
+          ? () {
             signUp(emailEditingController.text, passwordEditingController.text);
-          },
+          }
+          : null,
           child: Text(
             "Sign Up",
             textAlign: TextAlign.center,
@@ -342,7 +344,8 @@ void _onAcceptChanged(bool? value) async {
 
   // sign Up function
   void signUp(String email, String password) async {
-    if (_formKey.currentState!.validate()) {
+    // Before sign up, ensure that the user has agreed to the terms and conditions
+    if (_formKey.currentState!.validate() && _accept) {
       try {
         await _auth
             .createUserWithEmailAndPassword(email: email, password: password)
