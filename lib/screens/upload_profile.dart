@@ -56,7 +56,7 @@ class _uploadProfileState extends State<uploadProfile> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Upload Profile Picture'),
+        title: Text('Profile Picture'),
       ),
       body: Center(
         child: Column(
