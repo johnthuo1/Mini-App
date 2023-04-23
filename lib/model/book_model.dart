@@ -1,5 +1,5 @@
 // ignore_for_file: unused_import
-// Book Model
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class BookModel {
@@ -10,6 +10,7 @@ class BookModel {
   String? description;
   String? frontImageUrl;
   String? backImageUrl;
+  String? borrowed;
   String? uploadedBy;
 
   BookModel(
@@ -20,6 +21,7 @@ class BookModel {
       this.description,
       this.frontImageUrl,
       this.backImageUrl,
+      this.borrowed,
       this.uploadedBy});
 
   // create a factory constructor from a DocumentSnapshot
@@ -32,6 +34,7 @@ class BookModel {
       description: map['description'],
       frontImageUrl: map['frontImageUrl'],
       backImageUrl: map['backImageUrl'],
+      borrowed: map['borrowed'],
       uploadedBy: map['uploadedBy'],
     );
   }
@@ -46,6 +49,7 @@ class BookModel {
       'description': description,
       'frontImageUrl': frontImageUrl,
       'backImageUrl': backImageUrl,
+      'borrowed': borrowed,
       'uploadedBy': uploadedBy,
     };
   }

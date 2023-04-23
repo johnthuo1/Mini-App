@@ -3,8 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 // import 'package:shared_preferences/shared_preferences.dart';
-// ignore: unused_import
-import 'package:firebase_messaging/firebase_messaging.dart';
+
 
 import '../model/user_model.dart';
 
@@ -16,6 +15,8 @@ class BookDetailsPage extends StatefulWidget {
   @override
   _BookDetailsPageState createState() => _BookDetailsPageState();
 }
+
+
 
 class _BookDetailsPageState extends State<BookDetailsPage> {
   User? user = FirebaseAuth.instance.currentUser;
@@ -41,6 +42,7 @@ class _BookDetailsPageState extends State<BookDetailsPage> {
       this.loggedInUser = UserModel.fromMap(value.data());
       setState(() {});
     });
+  
   }
 
   void _onBorrowButtonPressed() async {
@@ -57,26 +59,11 @@ class _BookDetailsPageState extends State<BookDetailsPage> {
       return;
     }
 
-    // Dialog box for a book that is already borrowed
     final book = snapshot.docs.first;
     if (book['borrowed'] == true) {
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text('Error'),
-            content: Text('This book is already borrowed.'),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
-            actions: [
-              TextButton(
-                child: Text('OK'),
-                onPressed: () => Navigator.of(context).pop(),
-              ),
-            ],
-          );
-        },
+      // Show an error message that the book is already borrowed
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('This book is already borrowed.')),
       );
       return;
     }
@@ -99,29 +86,14 @@ class _BookDetailsPageState extends State<BookDetailsPage> {
       _bookBorrowed = true;
     });
 
-    // Show a confirmation message Dialog to show that the book has been borrowed
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0),
-          ),
-          title: Text('Book Borrowed'),
+    // Show a confirmation message that the book has been borrowed
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
           content: Text(
-              'You have borrowed this book. Contact $uploadedByEmail to arrange pick up.'),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text('OK'),
-            ),
-          ],
-        );
-      },
+              'You have borrowed this book. Contact $uploadedByEmail to arrange pick up.')),
     );
   }
+
 
   @override
   Widget build(BuildContext context) {

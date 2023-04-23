@@ -525,7 +525,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  // Log out function
+
   Future<void> Logout(BuildContext context) async {
     await FirebaseAuth.instance.signOut();
     Navigator.pushReplacement(
