@@ -1,6 +1,7 @@
 // ignore_for_file: unnecessary_new, body_might_complete_normally_nullable, prefer_const_constructors, library_private_types_in_public_api, avoid_print, non_constant_identifier_names
 // You can also use Scaffold Messages
 import 'package:booksgrid/main.dart';
+import 'package:booksgrid/screens/forgot_password.dart';
 import 'package:booksgrid/screens/sign_up.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -110,12 +111,17 @@ class _LoginScreenState extends State<LoginScreen> {
     Widget ForgotPasswordBtn() {
       return Container(
         alignment: Alignment.centerRight,
-        child: TextButton(
-          onPressed: () {},
-          // padding: const EdgeInsets.only(right: 0.0),
-          child: Text(
-            'Forgot Password?',
-            style: kLabelStyle,
+        child: GestureDetector(
+          child: TextButton(
+            onPressed: () {
+                Navigator.push(
+                    context, MaterialPageRoute(
+                   builder: (context) => ForgotPasswordPage()));
+            },
+            child: Text(
+              'Forgot Password?',
+              style: kLabelStyle,
+            ),
           ),
         ),
       );
@@ -219,10 +225,12 @@ class _LoginScreenState extends State<LoginScreen> {
                                   MaterialPageRoute(
                                       builder: (context) => SignUpScreen()));
                             },
-                            child: Text(
-                              "Sign Up",
-                              style: kLabelStyle,
-                            ),
+                           child: Text(
+                                  "Sign Up",
+                                  style: TextStyle(
+                                    color: Colors.yellow,
+                                  ),
+                                ),
                           )
                         ])
                   ],
