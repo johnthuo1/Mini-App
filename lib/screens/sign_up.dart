@@ -10,6 +10,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({Key? key}) : super(key: key);
@@ -21,10 +22,9 @@ class SignUpScreen extends StatefulWidget {
 class _SignUpScreenState extends State<SignUpScreen> {
   final _auth = FirebaseAuth.instance;
   bool _accept = false;
-  
+
   // string for displaying the error Message
   String? errorMessage;
-
 
   // our form key
   final _formKey = GlobalKey<FormState>();
@@ -33,6 +33,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final emailEditingController = new TextEditingController();
   final passwordEditingController = new TextEditingController();
   final confirmPasswordEditingController = new TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _loadAcceptState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -56,8 +62,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
         },
         textInputAction: TextInputAction.next,
         decoration: InputDecoration(
-          prefixIcon: Icon(Icons.account_circle, 
-               color: Colors.white,),
+          prefixIcon: Icon(
+            Icons.account_circle,
+            color: Colors.white,
+          ),
           contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
           hintText: "Username",
           hintStyle: kHintTextStyle,
@@ -87,12 +95,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
           return null;
         },
         onSaved: (value) {
-        emailEditingController.text = value!;
+          emailEditingController.text = value!;
         },
         textInputAction: TextInputAction.next,
         decoration: InputDecoration(
-          prefixIcon: Icon(Icons.mail, 
-               color: Colors.white,),
+          prefixIcon: Icon(
+            Icons.mail,
+            color: Colors.white,
+          ),
           contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
           hintText: "Email",
           hintStyle: kHintTextStyle,
@@ -124,8 +134,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
         },
         textInputAction: TextInputAction.next,
         decoration: InputDecoration(
-          prefixIcon: Icon(Icons.vpn_key,
-               color: Colors.white,),
+          prefixIcon: Icon(
+            Icons.vpn_key,
+            color: Colors.white,
+          ),
           contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
           hintText: "Password",
           hintStyle: kHintTextStyle,
@@ -155,8 +167,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
         },
         textInputAction: TextInputAction.done,
         decoration: InputDecoration(
-          prefixIcon: Icon(Icons.vpn_key,
-               color: Colors.white,),
+          prefixIcon: Icon(
+            Icons.vpn_key,
+            color: Colors.white,
+          ),
           contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
           hintText: "Confirm Password",
           hintStyle: kHintTextStyle,
@@ -164,44 +178,40 @@ class _SignUpScreenState extends State<SignUpScreen> {
             borderRadius: BorderRadius.circular(10),
           ),
         ));
-    
-// Terms and Conditions
- Widget TermsAndContionsCheckbox() {
-  return Padding(
-    padding: EdgeInsets.symmetric(vertical: 20.0),
-    child: SizedBox(
-      height: 20.0,
-      child: Row(
-        children: <Widget>[
-          Theme(
-            data: ThemeData(unselectedWidgetColor: Colors.white),
-            child: Checkbox(
-              value: _accept,
-              checkColor: Colors.green,
-              activeColor: Colors.white,
-              onChanged: (bool? value) {
-                setState(() {
-                  _accept = value!;
-                });
-              },
+
+  Widget TermsAndConditionsCheckbox() {
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 20.0),
+      child: SizedBox(
+        height: 20.0,
+        child: Row(
+          children: <Widget>[
+            Theme(
+              data: ThemeData(unselectedWidgetColor: Colors.white),
+              child: Checkbox(
+                value: _accept,
+                checkColor: Colors.green,
+                activeColor: Colors.white,
+                onChanged: _onAcceptChanged,
+              ),
             ),
-          ),
-      GestureDetector(
-            onTap: () async{
-               Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: ((context) => (TermsAndConditionsPage()))));
-            }, 
-            child: Text(
-            'Terms and Conditions',
-            style: kLabelStyle, ),)
-          
-        ],
+            GestureDetector(
+              onTap: () async{
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: ((context) => (TermsAndConditionsPage()))),
+                );
+              },
+              child: Text(
+                'Terms and Conditions',
+                style: kLabelStyle,
+              ),
+            )
+          ],
+        ),
       ),
-    ),
-  );
-}
+    );
+  }
 
     //signup button
     final signUpButton = Material(
@@ -226,27 +236,30 @@ class _SignUpScreenState extends State<SignUpScreen> {
           )),
     );
 
-   Widget SigninBtn() {
-    return GestureDetector(
-      onTap: () {
-        Navigator.push(context, MaterialPageRoute(builder: (context)=> (LoginScreen())));
-      },
-      child: RichText(
-        text: TextSpan(
-          children: [
-            TextSpan(
-              text: 'Already have an Account? ',
-              style: kLabelStyle,
-            ),
-            TextSpan(
-              text: 'Sign In',
-              style: kLabelStyle,
-            ),
-          ],
+    Widget SigninBtn() {
+      return GestureDetector(
+        onTap: () {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => (LoginScreen())));
+        },
+        child: RichText(
+          text: TextSpan(
+            children: [
+              TextSpan(
+                text: 'Already have an Account? ',
+                style: kLabelStyle,
+              ),
+              TextSpan(
+                text: 'Sign In',
+                style: TextStyle(
+                  color: Colors.yellow,
+                ),
+              ),
+            ],
+          ),
         ),
-      ),
-    );
-  }
+      );
+    }
 
     return Scaffold(
       backgroundColor: Color(0xFF61A4F1),
@@ -257,7 +270,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
           icon: Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () {
             // passing this to our root
-            Navigator.push(context,MaterialPageRoute(builder: (context) =>LoginScreen()));
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => LoginScreen()));
           },
         ),
       ),
@@ -274,15 +288,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
-                    SizedBox(                      height: 70,
-                      child: Text("Welcome to Alibrary&",
-                      style: GoogleFonts.arizonia(
-                        color: Colors.white,
-                        fontSize: 35,
-                        fontWeight: FontWeight.bold,
-                      ),),
+                    SizedBox(
+                      height: 70,
+                      child: Text(
+                        "Welcome to Alibrary&",
+                        style: GoogleFonts.arizonia(
+                          color: Colors.white,
+                          fontSize: 35,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ),
-                 
                     SizedBox(height: 20),
                     userNameField,
                     SizedBox(height: 20),
@@ -291,7 +307,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     passwordField,
                     SizedBox(height: 20),
                     confirmPasswordField,
-                    TermsAndContionsCheckbox(),
+                    TermsAndConditionsCheckbox(),
                     SizedBox(height: 20),
                     signUpButton,
                     SizedBox(height: 15),
@@ -305,6 +321,24 @@ class _SignUpScreenState extends State<SignUpScreen> {
       ),
     );
   }
+
+  void _loadAcceptState() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _accept = prefs.getBool('accept') ?? false;
+    });
+  }
+
+void _onAcceptChanged(bool? value) async {
+  if (value != null) {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _accept = value;
+      prefs.setBool('accept', value);
+    });
+  }
+}
+
 
   // sign Up function
   void signUp(String email, String password) async {
@@ -344,7 +378,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       }
     }
   }
-  
+
   postDetailsToFirestore() async {
     // calling our firestore
     // calling our user model
@@ -366,9 +400,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         .set(userModel.toMap());
     Fluttertoast.showToast(msg: "Account created successfully :) ");
 
-    Navigator.pushAndRemoveUntil(
-        (context),
-        MaterialPageRoute(builder: (context) => HomePage()),
-        (route) => false);
+    Navigator.pushAndRemoveUntil((context),
+        MaterialPageRoute(builder: (context) => HomePage()), (route) => false);
   }
 }
