@@ -26,7 +26,7 @@ class _BookUploadPageState extends State<BookUploadPage> {
   late User? user;
   late UserModel loggedInUser;
   final _descriptionScrollController = ScrollController();
-// Get the user document from Firestore using the user's UID
+// Get the user document from Firestore using the user UID
   final Color _buttonColor = Colors.grey;
   final _formKey = GlobalKey<FormState>();
   final _picker = ImagePicker();
