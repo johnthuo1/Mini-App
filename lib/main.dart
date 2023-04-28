@@ -1,5 +1,5 @@
 // ignore_for_file: prefer_const_constructors, depend_on_referenced_packages, unused_import, unnecessary_this, sdk_version_constructor_tearoffs, non_constant_identifier_names, use_build_context_synchronously, unnecessary_null_comparison, avoid_print, unused_field, unused_element, prefer_const_literals_to_create_immutables
-
+// Home and Drawer pages
 import 'dart:io';
 
 import 'package:booksgrid/screens/book_details.dart';
