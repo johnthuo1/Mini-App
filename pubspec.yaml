@@ -53,6 +53,7 @@ dependencies:
   flutter_local_notifications: ^9.2.0
   http: ^0.13.4
   overlay_support: ^2.1.0
+  mockito: ^5.4.0
 
 
 dev_dependencies:
