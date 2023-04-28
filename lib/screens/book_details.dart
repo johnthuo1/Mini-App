@@ -129,81 +129,87 @@ class _BookDetailsPageState extends State<BookDetailsPage> {
       appBar: AppBar(
         title: Text('Book Details'),
       ),
-      body: FutureBuilder<QuerySnapshot<Map<String, dynamic>>>(
+     body: FutureBuilder<QuerySnapshot<Map<String, dynamic>>>(
         future: _bookFuture,
         builder: (context, snapshot) {
           if (snapshot.hasData && snapshot.data!.docs.isNotEmpty) {
             final book = snapshot.data!.docs.first.data();
 
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Add animations on the Book Image to make it look better
-                Padding(
-                  padding: EdgeInsets.fromLTRB(90, 20, 0, 20),
-                  child: SizedBox(
-                    width: MediaQuery.of(context).size.width / 2,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(30),
-                      child: Image.network(
-                        book['frontImageUrl'] ?? '',
-                        errorBuilder: (context, error, stackTrace) {
-                          return Icon(Icons.image_not_supported);
-                        },
+            return SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Add animations on the Book Image to make it look better
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(90, 20, 0, 20),
+                    child: SizedBox(
+                      width: MediaQuery.of(context).size.width / 2,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(30),
+                        child: Image.network(
+                          book['frontImageUrl'] ?? '',
+                          errorBuilder: (context, error, stackTrace) {
+                            return Icon(Icons.image_not_supported);
+                          },
+                        ),
                       ),
                     ),
                   ),
-                ),
 
-                SizedBox(height: 16),
-                Text(
-                  book['title'] ?? 'Title not provided for this book',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-                SizedBox(height: 8),
-                Text(
-                  'By ${book['author'] ?? 'Author not provided for this book'}',
-                  style: TextStyle(fontSize: 16),
-                ),
-                SizedBox(height: 16),
-                Text(
-                  book['description'] ??
-                      'Description not provided for this book',
-                  style: TextStyle(fontSize: 16),
-                ),
-                SizedBox(height: 16),
+                  SizedBox(height: 16),
+                  Text(
+                    book['title'] ?? 'Title not provided for this book',
+                    style:
+                        TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(height: 8),
+                  Text(
+                    'By ${book['author'] ?? 'Author not provided for this book'}',
+                    style: TextStyle(fontSize: 16),
+                  ),
+                  SizedBox(height: 16),
+                  Text(
+                    book['description'] ??
+                        'Description not provided for this book',
+                    style: TextStyle(fontSize: 16),
+                  ),
+                  SizedBox(height: 16),
 
-                // Add the Borrow Book button
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Padding(
-                    padding: EdgeInsets.all(10),
-                    child: GestureDetector(
-                      onTap: _bookBorrowed ? null : _onBorrowButtonPressed,
-                      child: Container(
-                        width: double.infinity,
-                        height: 20,
-                        decoration: BoxDecoration(
-                          color: _buttonColor,
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Center(
-                          child: Text(
-                            _bookBorrowed ? 'Book Borrowed' : 'Borrow Book',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
+                  // Add the Borrow Book button
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Padding(
+                      padding: EdgeInsets.all(5),
+                      child: GestureDetector(
+                        onTap:
+                            _bookBorrowed ? null : _onBorrowButtonPressed,
+                        child: Container(
+                          width: double.infinity,
+                          height: 35,
+                          decoration: BoxDecoration(
+                            color: _buttonColor,
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Center(
+                            child: Text(
+                              _bookBorrowed
+                                  ? 'Book Borrowed'
+                                  : 'Borrow Book',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
                         ),
                       ),
                     ),
                   ),
-                ),
 
-                SizedBox(height: 16),
-              ],
+                  SizedBox(height: 16),
+                ],
+              ),
             );
           } else if (snapshot.hasError) {
             return Center(
