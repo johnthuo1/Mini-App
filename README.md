@@ -1,10 +1,6 @@
 # THE ALIBRARY PROJECT
 
-Here are the resources we used to complete our progress so far:
-
-- [Firebase Authentication](https://youtu.be/4vKiJZNPhss)
-- [Login & Signup Fibrebase Sample](https://github.com/Kavit900/flutter_login_signup_firebase)
-- Application of class content (message UI class example for notifications page)
+- [Video Recording](https://drive.google.com/file/d/1DzPP_T4fZphSydr8XXEQAG-7tadoWukX/view?usp=sharing)
 
 
 To see the UI/UX implementation of our mini-project, view our [UI/UX Implementation on flutterflow](https://app.flutterflow.io/share/mob-dev2-ft2lj0)
@@ -37,22 +33,4 @@ List of Application Pages (and the status of the UI design)
 - user_books  (done)
 - user_information (done)
 
-We have implemented 9 of the 10 UI/UX designed screens. That makes 90% as required. The Homepage and the drawer are all within the main.dart file.
 
-### Here is a list of the pages done:
-- Sign Up
-- Terms and Conditions
-- Sign In
-- Home
-- Drawer (UI/UX fully done, but yet to be put on all pages. Only available on homepage)
-- Notifications (pending)
-- Profile 
-- Settings
-- upload_book
-- book_details (pending)
-- user_books
-- user_information
-
-###Page not yet implemented:
-
-Book Details - as it requires connection with the database.
