@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, depend_on_referenced_packages, unused_import, unnecessary_this, sdk_version_constructor_tearoffs, non_constant_identifier_names, use_build_context_synchronously, unnecessary_null_comparison, avoid_print, unused_field
+// ignore_for_file: prefer_const_constructors, depend_on_referenced_packages, unused_import, unnecessary_this, sdk_version_constructor_tearoffs, non_constant_identifier_names, use_build_context_synchronously, unnecessary_null_comparison, avoid_print, unused_field, unused_element, prefer_const_literals_to_create_immutables
 
 import 'dart:io';
 
@@ -88,7 +88,6 @@ class _HomePageState extends State<HomePage> {
 
   final List<String> _listItem = [];
   final List<String> _isbnList = [];
-  final List<String> _profList = [];
 
   Future<void> fetchBookImages() async {
     final QuerySnapshot<Map<String, dynamic>> querySnapshot =
@@ -426,30 +425,31 @@ class _HomePageState extends State<HomePage> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: <Widget>[
-                      Text(
-                        "Top Rated Book",
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 35,
-                            fontWeight: FontWeight.bold),
-                      ),
                       SizedBox(
-                        height: 30,
-                      ),
-                      Container(
-                        height: 50,
-                        margin: EdgeInsets.symmetric(horizontal: 40),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: Colors.white),
-                        child: Center(
-                            child: Text(
-                          "View",
+                        child: Text(
+                          "Top Rated Book",
                           style: TextStyle(
-                              color: Colors.grey[900],
+                              color: Colors.white,
+                              fontSize: 25,
                               fontWeight: FontWeight.bold),
-                        )),
+                        ),
                       ),
+                  
+                      // Container(
+                      //   height: 50,
+                      //   margin: EdgeInsets.symmetric(horizontal: 40),
+                      //   decoration: BoxDecoration(
+                      //       borderRadius: BorderRadius.circular(10),
+                      //       color: Colors.white),
+                      //   // child: Center(
+                      //   //     child: Text(
+                      //   //   "View",
+                      //   //   style: TextStyle(
+                      //   //       color: Colors.grey[900],
+                      //   //       fontWeight: FontWeight.bold),
+                      //   // )),
+                      // ),
+                      
                       SizedBox(
                         height: 30,
                       ),
