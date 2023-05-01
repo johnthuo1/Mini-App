@@ -53,7 +53,7 @@ void main() {
     await tester.pumpWidget(MaterialApp(home: BookUploadPage()));
 
     // Enter invalid ISBN
-    await tester.enterText(find.byKey(Key('isbn')), '');
+    await tester.enterText(find.byKey(Key('ISBN')), '');
     await tester.tap(find.text('Save'));
     await tester.pumpAndSettle();
 
@@ -61,7 +61,7 @@ void main() {
     expect(find.text('Please enter the book ISBN'), findsOneWidget);
 
     // Enter valid ISBN
-    await tester.enterText(find.byKey(Key('isbn')), '1234567890');
+    await tester.enterText(find.byKey(Key('ISBN')), '1234567890');
     await tester.tap(find.text('Save'));
     await tester.pumpAndSettle();
 
