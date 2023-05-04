@@ -1,6 +1,6 @@
 # THE ALIBRARY PROJECT
 
-- [Video Recording](https://drive.google.com/file/d/1DzPP_T4fZphSydr8XXEQAG-7tadoWukX/view?usp=sharing)
+- [Group Video Recording](https://drive.google.com/file/d/1DzPP_T4fZphSydr8XXEQAG-7tadoWukX/view?usp=sharing)
 
 
 To see the UI/UX implementation of our mini-project, view our [UI/UX Implementation on flutterflow](https://app.flutterflow.io/share/mob-dev2-ft2lj0)
