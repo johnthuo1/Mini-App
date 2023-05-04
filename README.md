@@ -14,7 +14,7 @@ A few things to note when navigating through the UI/UX design:
 - On logout, the user can sign in. There is a back button on almost all pages to enhance smooth navigation to previously visited pages.
 - The actual implementation will have the drawer on all pages. For now, we have implemented the drawer but it only appears on the homepage. the back button on most pages will help take users back to the homepage.
 
-# ABOUT THE ALIBRARY PROJECT </br>
+# ABOUT THE ALIBRARY PROJECT <br /> 
 This is a flutter mobile app that connects the ALU community (students and staff) to exchange books with one another, irrespective of their social circles, cohorts, or courses. This app aims to foster connections and promote a shared community reading culture. Students can upload images of books they own, while others on the platform can 'book' the book they're interested in reading. The app will facilitate communication between the book owner and the interested student, sav ing the latter the cost of purchasing that book. The app will also track who has booked a particular book, providing a reliable record in case of any misconduct or lost books. In essence, this app will provide students with an opportunity to broaden their horizons, discover new books at no cost, and develop a lifelong love for reading.
 
 # Purpose of the App </br>
@@ -46,3 +46,12 @@ List of Application Pages
 - Profile Page
 - user_books
 - user_information
+
+# Security Measures
+To secure the application, we set up SHA-256 Certificate. Overall, SHA-256 is considered to be a secure and reliable hashing algorithm and is widely adopted in modern security applications.<br /> 
+The command to follow is as follows: <br /> 
+    In your project root : 
+         cd android
+        ./gradlew signingReport
+    
+   This will generate both SHA -1 and SHA-256 fingerprints. We used, SHA-256. <br /> 
