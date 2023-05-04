@@ -55,4 +55,5 @@ The command to follow is as follows: <br />
          - ./gradlew signingReport <br /> 
     
    This will generate both SHA -1 and SHA-256 fingerprints. We used, SHA-256. <br /> 
- **Additionally, we enabled App Check using the SHA-256 fingerprints digits.**
+   
+ **Additionally, we enabled App Check using the SHA-256 fingerprints digits**  <br />
