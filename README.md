@@ -47,7 +47,7 @@ List of Application Pages
 - user_books
 - user_information
 
-# Security Measures
+# Security Measures <br /> 
 To secure the application, we set up SHA-256 Certificate. Overall, SHA-256 is considered to be a secure and reliable hashing algorithm and is widely adopted in modern security applications.<br /> 
 The command to follow is as follows: <br /> 
     In your project root : <br /> 
