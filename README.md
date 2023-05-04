@@ -51,7 +51,7 @@ List of Application Pages
 To secure the application, we set up SHA-256 Certificate. Overall, SHA-256 is considered to be a secure and reliable hashing algorithm and is widely adopted in modern security applications.<br /> 
 The command to follow is as follows: <br /> 
     In your project root : <br /> 
-         cd android <br /> 
-        ./gradlew signingReport <br /> 
+         - cd android <br /> 
+         - ./gradlew signingReport <br /> 
     
    This will generate both SHA -1 and SHA-256 fingerprints. We used, SHA-256. <br /> 
